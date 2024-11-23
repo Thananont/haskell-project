@@ -7,8 +7,11 @@ import Network.HTTP.Simple
 
 type URL = String
 
+
+-- General Download Function to Fetch Data from an Endpoint
 download :: URL -> IO L8.ByteString
 download url = do
     request <- parseRequest url
     response <- httpLBS request
     return $ getResponseBody response
+

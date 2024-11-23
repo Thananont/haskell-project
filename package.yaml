@@ -26,6 +26,7 @@ dependencies:
 - bytestring
 - aeson
 
+
 ghc-options:
 - -Wall
 - -Wcompat

@@ -22,21 +22,31 @@ main = do
             print url
             print "Downloading"
             json <- download url
-            print "PRINTING JSON FROM HERE"
             case (parseModes json) of
                 Left err -> print err
                 Right modes -> do
+                    -- Print the json file for Modes
                     print modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
+                    -- Print the list with the modeNames
                     putStrLn "Mode names:"
                     print modeNames
-                    putStrLn "HERE STARTS THE CONCATENATION"
+                    -- Concatenation of the URLs for the Routes API call
                     let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
-                    print parsedURLs
-            --L8.putStrLn json
+                    print parsedURLs -- Prints the list with the URLs
+                    -- Second API Call - Routes
+                    multipleAPIResults <- downloadMultiple parsedURLs
+                    --mapM_ L8.putStrLn multipleAPIResults -- Function to print the json file for Routes
+                    -- Parsing the Routes API
+                    let parsedFinal = map parseRoutes multipleAPIResults
+                    case sequence parsedFinal of
+                        Left err -> print err
+                        Right allRoutes -> do
+                            print allRoutes
         _ -> syntaxError
-        
+
+-- | Information Message to be displayed to the user in case he gives a wrong argument 
 syntaxError = putStrLn
     "Usage: stack run -- [args]\n\
     \\n\

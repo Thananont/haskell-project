@@ -44,6 +44,13 @@ main = do
                         Left err -> print err
                         Right allRoutes -> do
                             print allRoutes
+
+                    --["modes"] <- do
+                    -- ["route", mode] <- do
+                    -- ["lines"] <- do
+                    -- ["services"] <- do
+                     
+                    
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
@@ -53,4 +60,5 @@ syntaxError = putStrLn
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
     \dumpdata               Generate data.json file with all data on database\n"
+
 

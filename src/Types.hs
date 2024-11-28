@@ -68,3 +68,22 @@ data Disruption = Disruption {
 data Crowding = Crowding {
     crowdingIsType :: String
 } deriving (Show, Generic)
+
+-- | Data Structures for the Search Feature (Extra Implementation)
+data SearchDestination = SearchDestination {
+    searchDestinationTypeIsType :: String,
+    query :: String,
+    total :: Int,
+    searchMatches :: [Match]
+} deriving (Show, Generic)
+
+data Match = Match {
+    matchIsType :: String,
+    icsId :: String,
+    modes :: [String],
+    zone :: Maybe String,
+    id :: String,
+    searchName :: String,
+    lat :: Double,
+    lon :: Double
+} deriving (Show, Generic)

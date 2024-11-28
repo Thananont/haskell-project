@@ -44,6 +44,14 @@ main = do
                         Left err -> print err
                         Right allRoutes -> do
                             print allRoutes
+
+        ["search"] -> do
+            putStrLn "Please enter your destination:"
+            searchDestination <- getLine
+            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?oysterOnly=false&app_key=" ++ tflAppKey
+            print searchUrl
+            searchJson <- download searchUrl
+            print searchJson
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
@@ -52,5 +60,6 @@ syntaxError = putStrLn
     \\n\
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
-    \dumpdata               Generate data.json file with all data on database\n"
+    \dumpdata               Generate data.json file with all data on database\n\
+    \search                 The user can search for a specific place\n"
 

@@ -48,7 +48,7 @@ main = do
         ["search"] -> do
             putStrLn "Please enter your destination:"
             searchDestination <- getLine
-            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?oysterOnly=false&app_key=" ++ tflAppKey
+            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?maxResults=5&oysterOnly=false&app_key=" ++ tflAppKey
             print searchUrl
             searchJson <- download searchUrl
             print searchJson

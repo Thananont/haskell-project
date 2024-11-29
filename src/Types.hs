@@ -8,7 +8,9 @@ module Types (
     ServiceType(..),
     LineStatus(..),
     Disruption(..),
-    Crowding(..)
+    Crowding(..),
+    SearchDestination(..),
+    Match(..)
 ) where
 
 import GHC.Generics
@@ -79,7 +81,9 @@ data SearchDestination = SearchDestination {
 
 data Match = Match {
     matchIsType :: String,
+    parentId :: Maybe String,
     icsId :: String,
+    topMostParentId :: Maybe String,
     modes :: [String],
     zone :: Maybe String,
     id :: String,

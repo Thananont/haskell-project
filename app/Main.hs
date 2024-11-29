@@ -52,6 +52,11 @@ main = do
             print searchUrl
             searchJson <- download searchUrl
             print searchJson
+            case (parseSearchDestinations searchJson) of
+                Left err -> print err
+                Right searchMatches -> do
+                    print searchMatches
+
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 

@@ -1,9 +1,11 @@
+module Database () where
+
 -- | Database 
 
 
 -- | Queries 
 
-
+{-
 -- | Query to print all the modes 
 queryAllMode :: Connection -> IO [String]
 queryAllMode conn =  do
@@ -34,5 +36,4 @@ queryServiceTypes conn = do
     return $ map fromOnly results
 
 
-
-
+-}

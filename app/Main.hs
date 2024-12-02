@@ -7,6 +7,7 @@ import Lib
 import Fetch
 import Parse
 import Types
+import Database
 import qualified Data.ByteString.Lazy.Char8 as L8
 
 -- App Key Constant Definition

@@ -8,9 +8,6 @@ module Database (
 import Types
 import Database.SQLite.Simple
 
-instance ToRow Mode where
-  toRow (Mode isType isTflService isFarePaying isScheduledService modeName) = toRow (isType, fromBool isTflService, fromBool isFarePaying, fromBool isScheduledService, modeName)
-
 fromBool :: Bool -> Int
 fromBool True = 1
 fromBool False = 0
@@ -19,13 +16,31 @@ fromBool False = 0
 insertModes :: [Mode] -> IO ()
 insertModes modes = do            
     connection <- open "haskell-project-database.db"
-    execute_ connection "CREATE TABLE IF NOT EXISTS mode (modeName TEXT PRIMARY KEY, isType TEXT, isTflService INTEGER NOT NULL CHECK(isTflService IN (0, 1)), isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)))"
+    execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
+    \ modeName TEXT PRIMARY KEY, \
+    \ isType TEXT, \
+    \ isTflService INTEGER NOT NULL CHECK(isTflService IN (0, 1)), \
+    \ isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), \
+    \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
+    \ )"
     mapM_ (executeInsertMode connection) modes
     close connection
 
 -- Function insert the modes to the table
 executeInsertMode :: Connection -> Mode -> IO ()
-executeInsertMode conn x = execute conn "INSERT INTO mode (modeName, isType, isTflService, isFarePaying, isScheduledService) VALUES (?,?,?,?,?)" (toRow x)
+executeInsertMode conn mode = execute conn "INSERT INTO mode ( \
+    \ modeName, \
+    \ isType, \
+    \ isTflService, \
+    \ isFarePaying, \ 
+    \ isScheduledService \ 
+    \ ) VALUES (?,?,?,?,?)" (
+      modeName mode, 
+      isType mode, 
+      fromBool (isTflService mode),
+      fromBool (isFarePaying mode),
+      fromBool (isScheduledService mode)
+    )
 
 -- Function that takes the routes and map them to be inserted into the table
 insertRoutesByMode :: [Route] -> IO ()

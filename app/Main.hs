@@ -47,15 +47,18 @@ main = do
 
         ["search"] -> do
             putStrLn "Please enter your destination:"
-            searchDestination <- getLine
-            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?maxResults=5&oysterOnly=false&app_key=" ++ tflAppKey
+            searchDestinationInput <- getLine
+            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestinationInput ++"?maxResults=5&oysterOnly=false&app_key=" ++ tflAppKey
             print searchUrl
             searchJson <- download searchUrl
             print searchJson
             case (parseSearchDestinations searchJson) of
                 Left err -> print err
-                Right searchMatches -> do
-                    print searchMatches
+                Right searchDestination -> do
+                    print searchDestination
+                    putStrLn "Matches:"
+                    print (searchMatches searchDestination)
+
 
         _ -> syntaxError
 

@@ -86,5 +86,5 @@ parseRoutes :: L8.ByteString -> Either String [Route]
 parseRoutes json = eitherDecode json :: Either String [Route]
 
 -- | Parses a ByteString containing JSON data into a list of SearchDestination objects (SearchDestination)
-parseSearchDestinations :: L8.ByteString -> Either String [SearchDestination]
-parseSearchDestinations json = eitherDecode json :: Either String [SearchDestination]
+parseSearchDestinations :: L8.ByteString -> Either String SearchDestination
+parseSearchDestinations json = eitherDecode json :: Either String SearchDestination

@@ -15,6 +15,9 @@ main :: IO ()
 main = do
     args <- getArgs
     case args of
+        ["create"] -> do --initialize the tables on the database
+            initTables
+
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
             print url

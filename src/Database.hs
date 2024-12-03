@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Database (
+    initTables,
     insertModes,
     insertRoutesByMode,
 ) where
@@ -12,17 +13,49 @@ fromBool :: Bool -> Int
 fromBool True = 1
 fromBool False = 0
 
+initTables :: IO ()
+initTables = do
+    connection <- open "haskell-project-database.db"
+    execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
+        \ modeName TEXT PRIMARY KEY, \
+        \ isType TEXT, \
+        \ isTflService INTEGER NOT NULL CHECK(isTflService IN (0, 1)), \
+        \ isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), \
+        \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
+        \ )"
+    execute_ connection "CREATE TABLE IF NOT EXISTS route ( \
+        \ routeId TEXT PRIMARY KEY, \ 
+        \ routeIsType TEXT, \ 
+        \ routeName TEXT, \
+        \ routeModeName TEXT, \ 
+        \ routeCreated TEXT, \ 
+        \ routeModified TEXT \
+        \ )"
+    execute_ connection "CREATE TABLE IF NOT EXISTS routesection ( \
+        \ routeSectionName TEXT, \ 
+        \ routeSectionIsType TEXT, \ 
+        \ routeModeName TEXT, \
+        \ direction TEXT, \
+        \ originationName TEXT, \ 
+        \ destinationName TEXT, \ 
+        \ originator TEXT, \ 
+        \ destination TEXT, \ 
+        \ validTo TEXT, \ 
+        \ validFrom TEXT \
+        \ )"
+    close connection
+
 -- Function that takes the modes and map them to be insert into the table
 insertModes :: [Mode] -> IO ()
 insertModes modes = do            
     connection <- open "haskell-project-database.db"
     execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
-    \ modeName TEXT PRIMARY KEY, \
-    \ isType TEXT, \
-    \ isTflService INTEGER NOT NULL CHECK(isTflService IN (0, 1)), \
-    \ isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), \
-    \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
-    \ )"
+        \ modeName TEXT PRIMARY KEY, \
+        \ isType TEXT, \
+        \ isTflService INTEGER NOT NULL CHECK(isTflService IN (0, 1)), \
+        \ isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), \
+        \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
+        \ )"
     mapM_ (executeInsertMode connection) modes
     close connection
 

@@ -15,10 +15,10 @@ main :: IO ()
 main = do
     args <- getArgs
     case args of
-        ["create"] -> do --initialize the tables on the database
+        ["create"] -> do -- initialize the tables on the database
             initTables
 
-        ["delete"] -> do
+        ["drop"] -> do -- drop the three tables on the database
             dropAllTables
 
         ["loaddata"] -> do -- download data from API and save to the database

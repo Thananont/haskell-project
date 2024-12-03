@@ -1,15 +1,16 @@
 module Main (main) where
 
 import System.Environment
-import System.IO
 
-import Lib
 import Database
 import Fetch
 import Parse
 import Types
+<<<<<<< HEAD
 import Database
 import qualified Data.ByteString.Lazy.Char8 as L8
+=======
+>>>>>>> origin/Database-Implementation
 
 -- App Key Constant Definition
 tflAppKey :: String
@@ -19,12 +20,18 @@ main :: IO ()
 main = do
     args <- getArgs
     case args of
+        ["create"] -> do -- initialize the tables on the database
+            initTables
+
+        ["drop"] -> do -- drop the three tables on the database
+            dropAllTables
+
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
             print url
             print "Downloading"
             json <- download url
-            case (parseModes json) of
+            case parseModes json of
                 Left err -> print err
                 Right modes -> do
                     -- Print the json file for Modes
@@ -58,6 +65,7 @@ main = do
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
+syntaxError :: IO ()
 syntaxError = putStrLn
     "Usage: stack run -- [args]\n\
     \\n\

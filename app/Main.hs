@@ -18,6 +18,9 @@ main = do
         ["create"] -> do --initialize the tables on the database
             initTables
 
+        ["delete"] -> do
+            dropAllTables
+
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
             print url

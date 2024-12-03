@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Database (
+    dropAllTables,
     initTables,
     insertModes,
     insertRoutesByMode,
@@ -29,20 +30,31 @@ initTables = do
         \ routeName TEXT, \
         \ routeModeName TEXT, \ 
         \ routeCreated TEXT, \ 
-        \ routeModified TEXT \
+        \ routeModified TEXT, \
+        \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName) \
         \ )"
     execute_ connection "CREATE TABLE IF NOT EXISTS routesection ( \
         \ routeSectionName TEXT, \ 
         \ routeSectionIsType TEXT, \ 
         \ routeModeName TEXT, \
+        \ routeId TEXT, \
         \ direction TEXT, \
         \ originationName TEXT, \ 
         \ destinationName TEXT, \ 
         \ originator TEXT, \ 
         \ destination TEXT, \ 
         \ validTo TEXT, \ 
-        \ validFrom TEXT \
+        \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName), \
+        \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
+    close connection
+
+dropAllTables :: IO ()
+dropAllTables = do
+    connection <- open "haskell-project-database.db"
+    execute_ connection (Query $ "DROP TABLE IF EXISTS mode")
+    execute_ connection (Query $ "DROP TABLE IF EXISTS route")
+    execute_ connection (Query $ "DROP TABLE IF EXISTS routesection")
     close connection
 
 -- Function that takes the modes and map them to be insert into the table
@@ -85,19 +97,22 @@ insertRoutesByMode x = do
         \ routeName TEXT, \
         \ routeModeName TEXT, \ 
         \ routeCreated TEXT, \ 
-        \ routeModified TEXT \
+        \ routeModified TEXT, \
+        \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName) \
         \ )"
     execute_ connection "CREATE TABLE IF NOT EXISTS routesection ( \
         \ routeSectionName TEXT, \ 
         \ routeSectionIsType TEXT, \ 
         \ routeModeName TEXT, \
+        \ routeId TEXT, \
         \ direction TEXT, \
         \ originationName TEXT, \ 
         \ destinationName TEXT, \ 
         \ originator TEXT, \ 
         \ destination TEXT, \ 
         \ validTo TEXT, \ 
-        \ validFrom TEXT \
+        \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName), \
+        \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
     mapM_ (executeInsertRoute connection) x
     close connection
@@ -120,30 +135,30 @@ executeInsertRoute connection route  = do
         routeModified route
         )
     let routeSections = routeRouteSections route
-    mapM_ (executeInsertRouteSection connection (routeModeName route)) routeSections
+    mapM_ (executeInsertRouteSection connection (routeModeName route) (routeId route)) routeSections
 
 -- Function insert the route sections
-executeInsertRouteSection :: Connection -> String -> RouteSection -> IO ()
-executeInsertRouteSection connection routeModeName routeSection = do
+executeInsertRouteSection :: Connection -> String -> String -> RouteSection -> IO ()
+executeInsertRouteSection connection routeModeName routeId routeSection = do
     execute connection "INSERT INTO routesection ( \ 
         \ routeSectionName, \
         \ routeSectionIsType, \
         \ routeModeName, \
+        \ routeId, \
         \ direction, \
         \ originationName, \
         \ destinationName, \ 
         \ originator, \ 
         \ destination, \ 
-        \ validTo, \ 
-        \ validFrom \ 
+        \ validTo \ 
         \ ) VALUES (?,?,?,?,?,?,?,?,?,?)" (routeSectionName routeSection,
         routeSectionIsType routeSection,
         routeModeName,
+        routeId,
         direction routeSection,
         originationName routeSection,
         destinationName routeSection, 
         originator routeSection, 
         destination routeSection, 
-        validTo routeSection,
-        validFrom routeSection 
+        validTo routeSection
         )

@@ -12,6 +12,7 @@ import qualified Data.ByteString.Lazy.Char8 as L8
 -- App Key Constant Definition
 tflAppKey :: String
 tflAppKey = "270923a7a73f4dccab574faba91fa8b4"
+modeNames :: [Modes]
 
 main :: IO ()
 main = do
@@ -58,8 +59,6 @@ main = do
                     print searchDestination
                     putStrLn "Matches:"
                     print (searchMatches searchDestination)
-
-
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
@@ -69,5 +68,6 @@ syntaxError = putStrLn
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
     \dumpdata               Generate data.json file with all data on database\n\
-    \search                 The user can search for a specific place\n"
+    \search                 The user can search for a specific place\n\
+    \line_discruptions      Provides the real-time disruptions for every mode\n"
 

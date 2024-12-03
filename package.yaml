@@ -25,6 +25,7 @@ dependencies:
 - sqlite-simple
 - bytestring
 - aeson
+- text
 
 
 ghc-options:

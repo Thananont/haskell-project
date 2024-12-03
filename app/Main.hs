@@ -4,9 +4,11 @@ import System.Environment
 import System.IO
 
 import Lib
+import Database
 import Fetch
 import Parse
 import Types
+import Database
 import qualified Data.ByteString.Lazy.Char8 as L8
 
 -- App Key Constant Definition
@@ -28,6 +30,8 @@ main = do
                 Right modes -> do
                     -- Print the json file for Modes
                     print modes
+                    -- Insert Modes into the database
+                    insertModes modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
                     -- Print the list with the modeNames
@@ -38,13 +42,12 @@ main = do
                     print parsedURLs -- Prints the list with the URLs
                     -- Second API Call - Routes
                     multipleAPIResults <- downloadMultiple parsedURLs
-                    --mapM_ L8.putStrLn multipleAPIResults -- Function to print the json file for Routes
                     -- Parsing the Routes API
                     let parsedFinal = map parseRoutes multipleAPIResults
                     case sequence parsedFinal of
                         Left err -> print err
                         Right allRoutes -> do
-                            print allRoutes
+                            mapM_ insertRoutesByMode allRoutes
 
         ["search"] -> do
             putStrLn "Please enter your destination:"
@@ -70,4 +73,5 @@ syntaxError = putStrLn
     \dumpdata               Generate data.json file with all data on database\n\
     \search                 The user can search for a specific place\n\
     \line_discruptions      Provides the real-time disruptions for every mode\n"
+
 

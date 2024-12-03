@@ -12,7 +12,6 @@ import qualified Data.ByteString.Lazy.Char8 as L8
 -- App Key Constant Definition
 tflAppKey :: String
 tflAppKey = "270923a7a73f4dccab574faba91fa8b4"
-modeNames :: [Modes]
 
 main :: IO ()
 main = do

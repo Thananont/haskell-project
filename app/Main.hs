@@ -4,6 +4,7 @@ import System.Environment
 import System.IO
 
 import Lib
+import Database
 import Fetch
 import Parse
 import Types
@@ -28,6 +29,8 @@ main = do
                 Right modes -> do
                     -- Print the json file for Modes
                     print modes
+                    -- Insert Modes into the database
+                    insertModes modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
                     -- Print the list with the modeNames
@@ -38,20 +41,20 @@ main = do
                     print parsedURLs -- Prints the list with the URLs
                     -- Second API Call - Routes
                     multipleAPIResults <- downloadMultiple parsedURLs
-                    --mapM_ L8.putStrLn multipleAPIResults -- Function to print the json file for Routes
                     -- Parsing the Routes API
                     let parsedFinal = map parseRoutes multipleAPIResults
                     case sequence parsedFinal of
                         Left err -> print err
                         Right allRoutes -> do
-                            print allRoutes
+                            mapM_ insertRoutesByMode allRoutes
 
-                    --["modes"] <- do
-                    -- ["route", mode] <- do
-                    -- ["lines"] <- do
-                    -- ["services"] <- do
-                     
-                    
+        ["search"] -> do
+            putStrLn "Please enter your destination:"
+            searchDestination <- getLine
+            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?maxResults=5&oysterOnly=false&app_key=" ++ tflAppKey
+            print searchUrl
+            searchJson <- download searchUrl
+            print searchJson
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
@@ -60,6 +63,7 @@ syntaxError = putStrLn
     \\n\
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
-    \dumpdata               Generate data.json file with all data on database\n"
+    \dumpdata               Generate data.json file with all data on database\n\
+    \search                 The user can search for a specific place\n"
 
 

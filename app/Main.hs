@@ -2,7 +2,6 @@ module Main (main) where
 
 import System.Environment
 
-
 import Database
 import Fetch
 import Parse
@@ -63,6 +62,9 @@ main = do
                     print searchDestination
                     putStrLn "Matches:"
                     print (searchMatches searchDestination)
+
+        ["disruptions"] -> do
+            putStrLn "Test"
 
         _ -> syntaxError
 

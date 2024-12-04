@@ -68,6 +68,14 @@ main = do
             print searchUrl
             searchJson <- download searchUrl
             print searchJson
+
+        ["disruptions"] -> do
+            connection <- createDatabase
+            modeNames <- queryAllMode connection
+            printModeName modeNames
+            let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
+            print parsedURLs -- Prints the list with the URLs
+
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 

@@ -1,16 +1,12 @@
 module Main (main) where
 
 import System.Environment
+import Database.SQLite.Simple (Connection, open)
 
 import Database
 import Fetch
 import Parse
 import Types
-<<<<<<< HEAD
-import Database
-import qualified Data.ByteString.Lazy.Char8 as L8
-=======
->>>>>>> origin/Database-Implementation
 
 -- App Key Constant Definition
 tflAppKey :: String
@@ -28,24 +24,24 @@ main = do
 
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
-            print url
+            --print url
             print "Downloading"
             json <- download url
             case parseModes json of
                 Left err -> print err
                 Right modes -> do
                     -- Print the json file for Modes
-                    print modes
+                    --print modes
                     -- Insert Modes into the database
                     insertModes modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
                     -- Print the list with the modeNames
-                    putStrLn "Mode names:"
-                    print modeNames
+                    --putStrLn "Mode names:"
+                    --print modeNames
                     -- Concatenation of the URLs for the Routes API call
                     let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
-                    print parsedURLs -- Prints the list with the URLs
+                    --print parsedURLs -- Prints the list with the URLs
                     -- Second API Call - Routes
                     multipleAPIResults <- downloadMultiple parsedURLs
                     -- Parsing the Routes API
@@ -54,6 +50,11 @@ main = do
                         Left err -> print err
                         Right allRoutes -> do
                             mapM_ insertRoutesByMode allRoutes
+        
+        ["mode"] -> do -- print all the modes
+            connection <- createDatabase
+            modeNames <- queryAllMode connection
+            mapM_ putStrLn modeNames
 
         ["search"] -> do
             putStrLn "Please enter your destination:"
@@ -72,6 +73,8 @@ syntaxError = putStrLn
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
     \dumpdata               Generate data.json file with all data on database\n\
-    \search                 The user can search for a specific place\n"
+    \search                 The user can search for a specific place\n\
+    \mode                   Print all modes\n"
+    
 
 

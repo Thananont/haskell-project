@@ -3,6 +3,7 @@ module Main (main) where
 import System.Environment
 import Database.SQLite.Simple (Connection, open)
 
+
 import Database
 import Fetch
 import Parse
@@ -51,10 +52,14 @@ main = do
                         Right allRoutes -> do
                             mapM_ insertRoutesByMode allRoutes
         
-        ["mode"] -> do -- print all the modes
+        ["modes"] -> do -- print all the modes
             connection <- createDatabase
             modeNames <- queryAllMode connection
-            mapM_ putStrLn modeNames
+            printModeName modeNames
+        ["routes", modeName] -> do
+            connection <- createDatabase
+            routes <- queryAllRoutes connection modeName
+            mapM_ print routes
 
         ["search"] -> do
             putStrLn "Please enter your destination:"
@@ -74,7 +79,8 @@ syntaxError = putStrLn
     \loaddata               Download data from API and save to the database\n\
     \dumpdata               Generate data.json file with all data on database\n\
     \search                 The user can search for a specific place\n\
-    \mode                   Print all modes\n"
+    \modes                  Print all modes\n\
+    \routes [modeName]      Print all routes for a specific mode\n"
     
 
 

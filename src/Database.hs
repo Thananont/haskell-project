@@ -1,15 +1,20 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
+
+
 module Database (
     dropAllTables,
     initTables,
     insertModes,
     insertRoutesByMode,
     queryAllMode,
+    queryAllRoutes,
     createDatabase,
+    printModeName, 
 ) where
 
+import Data.Char (toUpper, toLower)
 import Types
 import Database.SQLite.Simple
 
@@ -176,4 +181,28 @@ queryAllMode connection =  do
     let selectQuery = "SELECT modeName FROM mode"
     results <- query_ connection selectQuery :: IO [Only String]
     return $ map fromOnly results
+
+-- | Make the first letter of the string uppercase
+toUpperFirst :: String -> String
+toUpperFirst [] = []
+toUpperFirst (x:xs) = toUpper x : xs
+
+-- | Function to  print mode name with the first letter in uppercase
+printModeName :: [String] -> IO ()
+printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
+
+
+-- | Query to print all the routes
+queryAllRoutes :: Connection -> String -> IO [String]
+queryAllRoutes connection modeName = do
+    putStrLn $ "Please wait, Looking for all available routes for..." ++ modeName ++ " mode..."
+    let selectQuery = "SELECT routeName FROM route WHERE routeModeName = :routeModeName"
+    results <- queryNamed  connection selectQuery [":routeModeName" := modeName] :: IO [Only String]
+    if results == [] then
+        return ["No routes found for this mode"]
+    else
+        return $ map fromOnly results
+
+
+
 

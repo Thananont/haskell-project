@@ -72,8 +72,10 @@ instance FromJSON Disruption where
 
 instance FromJSON LineStatus where
     parseJSON = genericParseJSON customOptions
+
 instance FromJSON SearchDestination where
     parseJSON = genericParseJSON customOptions
+    
 instance FromJSON Match where
     parseJSON = genericParseJSON customOptions
 

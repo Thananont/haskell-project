@@ -72,9 +72,14 @@ main = do
         ["disruptions"] -> do
             connection <- createDatabase
             modeNames <- queryAllMode connection
-            printModeName modeNames
-            let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
-            print parsedURLs -- Prints the list with the URLs
+            let parsedURLsDisruptions = parseURLforDisruptionsAPI modeNames tflAppKey
+            multipleAPIResultsDisruptions <- downloadMultiple parsedURLsDisruptions
+            let parsedFinalDisruptions = map parseDisruptions multipleAPIResultsDisruptions
+            case sequence parsedFinalDisruptions of
+                Left err -> print err
+                Right modes -> do
+                    print parsedFinalDisruptions
+
 
         _ -> syntaxError
 

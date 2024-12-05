@@ -4,6 +4,8 @@ module Parse (
     parseModes,
     parseURLforRoutesAPI,
     parseRoutes,
+    parseURLforDisruptionsAPI,
+    parseDisruptions,
 ) where
 
 import Types
@@ -13,10 +15,10 @@ import qualified Data.ByteString.Lazy.Char8 as L8
 -- | Function to rename fields in the JSON to match Haskell data type field names.
 renameFields :: String -> String
 
--- Rename Fields for the Modes
+-- | Rename Fields for the Modes
 renameFields "isType" = "$type"
 
--- Rename Fields for the Routes
+-- | Rename Fields for the Routes
 renameFields "routeIsType" = "$type"
 renameFields "routeId" = "id"
 renameFields "routeName" = "name"
@@ -27,11 +29,14 @@ renameFields "routeModified" = "modified"
 renameFields "routeLineStatuses" = "lineStatuses"
 renameFields "routeRouteSections" = "routeSections"
 
--- Rename Fields for the Routes Section
+-- | Rename Fields for the Routes Section
 renameFields "routeSectionIsType" = "$type"
 renameFields "routeSectionName" = "name"
 
--- General Rename
+-- | Rename Fields for the Disruptions
+renameFields "disruptionDetailIsType" = "$type"
+
+-- | General Rename
 renameFields other = other
 
 -- | Custom options for JSON parsing.
@@ -55,6 +60,15 @@ instance FromJSON Disruption where
 instance FromJSON LineStatus where
     parseJSON = genericParseJSON customOptions
 
+instance FromJSON DisruptionDetail where
+    parseJSON = genericParseJSON customOptions
+
+instance FromJSON AffectedRoute where
+    parseJSON = genericParseJSON customOptions
+
+instance FromJSON AffectedStop where
+    parseJSON = genericParseJSON customOptions
+
 -- | Parses a ByteString containing JSON data into a list of Mode objects (Modes).
 parseModes :: L8.ByteString -> Either String Modes
 parseModes json = eitherDecode json :: Either String [Mode]
@@ -65,6 +79,17 @@ parseURLforRoutesAPI modeName app_key = map (\mode -> firstPartUrl ++ mode ++ "/
     where 
         firstPartUrl = "https://api.tfl.gov.uk/Line/Mode/"
 
--- | Parses a ByteString containing JSON data into a list of Routes objects (Modes).
+-- | Parses a ByteString containing JSON data into a list of Routes objects.
 parseRoutes :: L8.ByteString -> Either String [Route]
 parseRoutes json = eitherDecode json :: Either String [Route]
+
+-- | Helper function to concatenate the URLs for the Disruptions by Mode API
+parseURLforDisruptionsAPI :: [String]-> String -> [String]
+parseURLforDisruptionsAPI modeName app_key = map (\mode -> firstPartUrl ++ mode ++ "/Disruption?app_key=" ++ app_key) modeName
+    where 
+        firstPartUrl = "https://api.tfl.gov.uk/Line/Mode/"
+
+-- | Parses a ByteString containing JSON data into a list of Disruption objects.
+parseDisruptions :: L8.ByteString -> Either String DisruptionsResponse
+parseDisruptions json = eitherDecode json :: Either String DisruptionsResponse
+

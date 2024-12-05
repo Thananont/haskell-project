@@ -71,6 +71,17 @@ main = do
                     putStrLn "Found search data"
                     let matches = searchMatches searchData
                     mapM_ printMatch matches
+                    
+        ["disruptions"] -> do
+            connection <- createDatabase
+            modeNames <- queryAllMode connection
+            let parsedURLsDisruptions = parseURLforDisruptionsAPI modeNames tflAppKey
+            multipleAPIResultsDisruptions <- downloadMultiple parsedURLsDisruptions
+            let parsedFinalDisruptions = map parseDisruptions multipleAPIResultsDisruptions
+            case sequence parsedFinalDisruptions of
+                Left err -> print err
+                Right modes -> do
+                    print parsedFinalDisruptions
 
         _ -> syntaxError
 

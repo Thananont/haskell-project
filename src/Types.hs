@@ -8,7 +8,9 @@ module Types (
     ServiceType(..),
     LineStatus(..),
     Disruption(..),
-    Crowding(..)
+    Crowding(..),
+    SearchDestination(..),
+    Match(..),
 ) where
 
 import GHC.Generics

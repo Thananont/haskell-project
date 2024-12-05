@@ -64,11 +64,27 @@ main = do
         ["search"] -> do
             putStrLn "Please enter your destination:"
             searchDestination <- getLine
-            let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" ++ searchDestination ++"?maxResults=5&oysterOnly=false&app_key=" ++ tflAppKey
-            print searchUrl
-            searchJson <- download searchUrl
-            print searchJson
+            result <- fetchStops tflAppKey searchDestination
+            case result of
+                Left err -> putStrLn ("Error parsing JSON: " ++ err)
+                Right searchData -> do
+                    putStrLn "Found search data"
+                    let matches = searchMatches searchData
+                    mapM_ printMatch matches
+
         _ -> syntaxError
+
+
+printMatch :: Match -> IO ()
+printMatch match = do
+    putStrLn $ "Name: " ++ searchName match
+    putStrLn $ "Modes: " ++ show (modes match)
+    putStrLn ""
+                
+       
+
+        
+
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
 syntaxError :: IO ()

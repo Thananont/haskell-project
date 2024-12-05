@@ -11,12 +11,17 @@ module Database (
     queryAllMode,
     queryAllRoutes,
     createDatabase,
-    printModeName, 
+    printModeName,
+    fetchStops, 
 ) where
 
 import Data.Char (toUpper, toLower)
 import Types
 import Database.SQLite.Simple
+import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
+import Data.Aeson (eitherDecode)
+import Parse
+
 
 fromBool :: Bool -> Int
 fromBool True = 1
@@ -203,6 +208,14 @@ queryAllRoutes connection modeName = do
     else
         return $ map fromOnly results
 
-
-
+-- | Query for the search function
+fetchStops :: String -> String -> IO (Either String SearchDestination)
+fetchStops tflAppKey searchDestination = do
+  let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" 
+                  ++ searchDestination 
+                  ++ "?maxResults=10&oysterOnly=false&app_key=" 
+                  ++ tflAppKey
+  response <- httpLBS (parseRequest_ searchUrl)
+  let body = getResponseBody response
+  return (eitherDecode body :: Either String SearchDestination)
 

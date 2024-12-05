@@ -31,6 +31,24 @@ renameFields "routeRouteSections" = "routeSections"
 renameFields "routeSectionIsType" = "$type"
 renameFields "routeSectionName" = "name"
 
+
+-- Rename Fields for Search Destination 
+renameFields "searchDestinationTypeIsType" = "$type"
+renameFields "query" = "query"
+renameFields "total" = "total"
+renameFields "searchMatches" = "matches"
+
+-- Rename Fields for Match
+renameFields "matchIsType" = "$type"
+renameFields "icsId" = "icsId"
+renameFields "modes" = "modes"
+renameFields "zone" = "zone"
+renameFields "id" = "id"
+renameFields "searchName" = "name"
+renameFields "lat" = "lat"
+renameFields "lon" = "lon"
+
+
 -- General Rename
 renameFields other = other
 
@@ -53,6 +71,10 @@ instance FromJSON Disruption where
     parseJSON = genericParseJSON customOptions
 
 instance FromJSON LineStatus where
+    parseJSON = genericParseJSON customOptions
+instance FromJSON SearchDestination where
+    parseJSON = genericParseJSON customOptions
+instance FromJSON Match where
     parseJSON = genericParseJSON customOptions
 
 -- | Parses a ByteString containing JSON data into a list of Mode objects (Modes).

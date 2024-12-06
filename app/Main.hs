@@ -2,6 +2,9 @@ module Main (main) where
 
 import System.Environment
 import Database.SQLite.Simple (Connection, open)
+import Network.HTTP.Simple (httpLBS, parseRequest, getResponseBody)
+
+
 
 
 import Database
@@ -75,23 +78,21 @@ main = do
         ["disruptions"] -> do
             connection <- createDatabase
             modeNames <- queryAllMode connection
-            let parsedURLsDisruptions = parseURLforDisruptionsAPI modeNames tflAppKey
-            multipleAPIResultsDisruptions <- downloadMultiple parsedURLsDisruptions
-            let parsedFinalDisruptions = map parseDisruptions multipleAPIResultsDisruptions
-            case sequence parsedFinalDisruptions of
-                Left err -> print err
-                Right modes -> do
-                    print parsedFinalDisruptions
+           --let urls = parseURLforDisruptionsAPI modeNames tflAppKey
+            
+            mapM_ (\mode -> do
+                let urls = parseURLforDisruptionsAPI [mode] tflAppKey
+                mapM_ (\url -> do
+                    request <- parseRequest url
+                    response <- httpLBS request
+                    let jsonResponse = getResponseBody response
+                    queryAllDisruptions mode jsonResponse  -- Pass mode name along with the disruptions
+                    ) urls
+                ) modeNames
+       
 
         _ -> syntaxError
-
-
-printMatch :: Match -> IO ()
-printMatch match = do
-    putStrLn $ "Name: " ++ searchName match
-    putStrLn $ "Modes: " ++ show (modes match)
-    putStrLn ""
-                
+  
        
 
         
@@ -107,7 +108,8 @@ syntaxError = putStrLn
     \dumpdata               Generate data.json file with all data on database\n\
     \search                 The user can search for a specific place\n\
     \modes                  Print all modes\n\
-    \routes [modeName]      Print all routes for a specific mode\n"
+    \routes [modeName]      Print all routes for a specific mode\n\
+    \disruptions            Print all the disruptions\n"
     
 
 

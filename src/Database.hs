@@ -12,13 +12,18 @@ module Database (
     queryAllRoutes,
     createDatabase,
     printModeName,
-    fetchStops, 
+    fetchStops,
+    printMatch,
+    queryAllDisruptions,
+    printDisruptions,
+
 ) where
 
 import Data.Char (toUpper, toLower)
 import Types
 import Database.SQLite.Simple
 import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
+import qualified Data.ByteString.Lazy.Char8 as L8
 import Data.Aeson (eitherDecode)
 import Parse
 
@@ -197,6 +202,8 @@ printModeName :: [String] -> IO ()
 printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 
 
+-- | EXTRA FEARURES IMPLEMENTATION
+
 -- | Query to print all the routes
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
@@ -219,3 +226,33 @@ fetchStops tflAppKey searchDestination = do
   let body = getResponseBody response
   return (eitherDecode body :: Either String SearchDestination)
 
+printMatch :: Match -> IO ()
+printMatch match = do
+    putStrLn $ "Name: " ++ searchName match
+    putStrLn $ "Modes: " ++ show (modes match)
+    putStrLn ""
+           
+
+
+-- | Query to print all the disruptions
+-- | Funtion to print the disruption in a readble format 
+printDisruptions :: String -> DisruptionsResponse -> IO ()
+printDisruptions modeName disruptions = do
+    putStrLn $ "Disruptions for Mode: " ++ modeName
+    mapM_ printDisruption disruptions
+
+printDisruption :: DisruptionDetail -> IO ()
+printDisruption disruption = do
+    putStrLn $ "Category: " ++ category disruption
+    putStrLn $ "Description: " ++ description disruption
+    putStrLn $ "Affected Routes: " ++ show (map affectedRouteName $ affectedRoutes disruption)
+    putStrLn $ "Affected Stops: " ++ show (map affectedStopName $ affectedStops disruption)
+    putStrLn $ "Last Update: " ++ show (lastUpdate disruption)
+    putStrLn "-----------------------------------"
+
+
+queryAllDisruptions :: String -> L8.ByteString -> IO ()
+queryAllDisruptions modeName json =
+    case parseDisruptions json of
+        Left err -> putStrLn $ "Error in parsing disruptions: " ++ err
+        Right disruptions -> printDisruptions modeName disruptions

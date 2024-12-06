@@ -33,7 +33,6 @@ renameFields "routeRouteSections" = "routeSections"
 renameFields "routeSectionIsType" = "$type"
 renameFields "routeSectionName" = "name"
 
-<<<<<<< HEAD
 
 -- Rename Fields for Search Destination 
 renameFields "searchDestinationTypeIsType" = "$type"
@@ -53,12 +52,10 @@ renameFields "lon" = "lon"
 
 
 -- General Rename
-=======
 -- | Rename Fields for the Disruptions
 renameFields "disruptionDetailIsType" = "$type"
 
 -- | General Rename
->>>>>>> origin/Disruptions-Implementation
 renameFields other = other
 
 -- | Custom options for JSON parsing.
@@ -86,6 +83,8 @@ instance FromJSON SearchDestination where
     parseJSON = genericParseJSON customOptions
     
 instance FromJSON Match where
+    parseJSON = genericParseJSON customOptions
+
 instance FromJSON DisruptionDetail where
     parseJSON = genericParseJSON customOptions
 
@@ -117,5 +116,5 @@ parseURLforDisruptionsAPI modeName app_key = map (\mode -> firstPartUrl ++ mode 
 
 -- | Parses a ByteString containing JSON data into a list of Disruption objects.
 parseDisruptions :: L8.ByteString -> Either String DisruptionsResponse
-parseDisruptions json = eitherDecode json :: Either String DisruptionsResponse
+parseDisruptions json = eitherDecode json :: Either String DisruptionsResponse 
 

@@ -12,7 +12,9 @@ module Types (
     DisruptionDetail(..),
     AffectedRoute(..),
     AffectedStop(..),
-    DisruptionsResponse
+    DisruptionsResponse,
+    SearchDestination(..),
+    Match(..),
 ) where
 
 import GHC.Generics

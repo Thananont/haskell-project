@@ -256,3 +256,5 @@ queryAllDisruptions modeName json =
     case parseDisruptions json of
         Left err -> putStrLn $ "Error in parsing disruptions: " ++ err
         Right disruptions -> printDisruptions modeName disruptions
+
+

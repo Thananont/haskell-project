@@ -58,6 +58,7 @@ main = do
         ["modes"] -> do -- print all the modes
             connection <- createDatabase
             modeNames <- queryAllMode connection
+            putStrLn "All available modes:"
             printModeName modeNames
         ["routes", modeName] -> do
             connection <- createDatabase

@@ -16,6 +16,7 @@ module Database (
     printMatch,
     queryAllDisruptions,
     printDisruptions,
+    queryAllStopPoints,
 
 ) where
 
@@ -26,6 +27,7 @@ import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
 import qualified Data.ByteString.Lazy.Char8 as L8
 import Data.Aeson (eitherDecode)
 import Parse
+import Control.Monad (when) 
 
 
 fromBool :: Bool -> Int
@@ -207,13 +209,28 @@ printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 -- | Query to print all the routes
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
-    putStrLn $ "Please wait, Looking for all available routes for..." ++ modeName ++ " mode..."
+    putStrLn $ "Please wait, Looking for all available routes for the" ++ modeName ++ "..."
+    putStrLn $ "----------------------------------------------------------"
     let selectQuery = "SELECT routeName FROM route WHERE routeModeName = :routeModeName"
     results <- queryNamed  connection selectQuery [":routeModeName" := modeName] :: IO [Only String]
     if results == [] then
         return ["No routes found for this mode"]
     else
         return $ map fromOnly results
+
+-- | Query for all stop points
+queryAllStopPoints :: Connection -> String -> IO [String]
+queryAllStopPoints connection modeName =  do
+    putStrLn $ "Looking for stop points for " ++ modeName ++ "...."
+    putStrLn $ "----------------------------------------------------------"
+    let selectQuery = "SELECT routeSectionName FROM routesection WHERE routeModeName = :routeModeName"
+    result <- queryNamed connection selectQuery [":routeModeName" := modeName] :: IO [Only String]
+    if result == [] then
+        return ["No stop points found"]
+    else
+        return $ map fromOnly result
+
+
 
 -- | Query for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
@@ -226,10 +243,11 @@ fetchStops tflAppKey searchDestination = do
   let body = getResponseBody response
   return (eitherDecode body :: Either String SearchDestination)
 
+-- | Funtion to do a pretty print
 printMatch :: Match -> IO ()
 printMatch match = do
     putStrLn $ "Name: " ++ searchName match
-    putStrLn $ "Modes: " ++ show (modes match)
+    putStrLn $ "Available modes: " ++ show (modes match)
     putStrLn ""
            
 
@@ -241,15 +259,21 @@ printDisruptions modeName disruptions = do
     putStrLn $ "Disruptions for Mode: " ++ modeName
     mapM_ printDisruption disruptions
 
+-- | Funtion to print non empty detials
 printDisruption :: DisruptionDetail -> IO ()
 printDisruption disruption = do
-    putStrLn $ "Category: " ++ category disruption
-    putStrLn $ "Description: " ++ description disruption
-    putStrLn $ "Affected Routes: " ++ show (map affectedRouteName $ affectedRoutes disruption)
-    putStrLn $ "Affected Stops: " ++ show (map affectedStopName $ affectedStops disruption)
-    putStrLn $ "Last Update: " ++ show (lastUpdate disruption)
+    let cat = category disruption
+    let desc = description disruption
+    let routes = affectedRoutes disruption
+    let stops = affectedStops disruption
+    let update = lastUpdate disruption
+    
+    when (not $ null cat) $ putStrLn $ "Category: " ++ cat
+    when (not $ null desc) $ putStrLn $ "Description: " ++ desc
+    when (not $ null routes) $ putStrLn $ "Affected Routes: " ++ show (map affectedRouteName routes)
+    when (not $ null stops) $ putStrLn $ "Affected Stops: " ++ show (map affectedStopName stops)
+    when (not $ null $ show update) $ putStrLn $ "Last Update: " ++ show update
     putStrLn "-----------------------------------"
-
 
 queryAllDisruptions :: String -> L8.ByteString -> IO ()
 queryAllDisruptions modeName json =

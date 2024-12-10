@@ -28,24 +28,17 @@ main = do
 
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
-            --print url
             print "Downloading"
             json <- download url
             case parseModes json of
                 Left err -> print err
                 Right modes -> do
-                    -- Print the json file for Modes
-                    --print modes
                     -- Insert Modes into the database
                     insertModes modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
-                    -- Print the list with the modeNames
-                    --putStrLn "Mode names:"
-                    --print modeNames
                     -- Concatenation of the URLs for the Routes API call
                     let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
-                    --print parsedURLs -- Prints the list with the URLs
                     -- Second API Call - Routes
                     multipleAPIResults <- downloadMultiple parsedURLs
                     -- Parsing the Routes API
@@ -54,16 +47,26 @@ main = do
                         Left err -> print err
                         Right allRoutes -> do
                             mapM_ insertRoutesByMode allRoutes
-        
-        ["modes"] -> do -- print all the modes
+
+        -- | Print all modes
+        ["modes"] -> do 
             connection <- createDatabase
             modeNames <- queryAllMode connection
             printModeName modeNames
-        ["routes", modeName] -> do
+        
+        -- | Print routes based on the Modes
+        ["routes", modeName] -> do 
             connection <- createDatabase
             routes <- queryAllRoutes connection modeName
             mapM_ print routes
 
+         -- | Print stop points based on the Modes
+        ["stop-points", modeName] -> do
+            connection <- createDatabase
+            stops <- queryAllStopPoints connection modeName
+            mapM_ print stops
+
+         -- | Search for destinations
         ["search"] -> do
             putStrLn "Please enter your destination:"
             searchDestination <- getLine
@@ -74,11 +77,11 @@ main = do
                     putStrLn "Found search data"
                     let matches = searchMatches searchData
                     mapM_ printMatch matches
-                    
+
+         -- | Print disruptions for all Kodes                    
         ["disruptions"] -> do
             connection <- createDatabase
             modeNames <- queryAllMode connection
-           --let urls = parseURLforDisruptionsAPI modeNames tflAppKey
             
             mapM_ (\mode -> do
                 let urls = parseURLforDisruptionsAPI [mode] tflAppKey
@@ -89,8 +92,8 @@ main = do
                     queryAllDisruptions mode jsonResponse  -- Pass mode name along with the disruptions
                     ) urls
                 ) modeNames
-       
 
+        
         _ -> syntaxError
   
        

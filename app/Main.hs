@@ -11,6 +11,8 @@ import Database
 import Fetch
 import Parse
 import Types
+import Control.Monad (unless)
+import Data.Char (toLower)
 
 -- App Key Constant Definition
 tflAppKey :: String
@@ -18,6 +20,7 @@ tflAppKey = "270923a7a73f4dccab574faba91fa8b4"
 
 main :: IO ()
 main = do
+    connection <- createDatabase
     args <- getArgs
     case args of
         ["create"] -> do -- initialize the tables on the database
@@ -48,22 +51,25 @@ main = do
                         Right allRoutes -> do
                             mapM_ insertRoutesByMode allRoutes
 
+        
+        
+
         -- | Print all modes
         ["modes"] -> do 
-            connection <- createDatabase
             modeNames <- queryAllMode connection
             printModeName modeNames
         
         -- | Print routes based on the Modes
-        ["routes", modeName] -> do 
-            connection <- createDatabase
-            routes <- queryAllRoutes connection modeName
+        ["routes", modeN] -> do 
+            let modenameL = map toLower modeN
+            routes <- queryAllRoutes connection modenameL
             mapM_ print routes
 
          -- | Print stop points based on the Modes
-        ["stop-points", modeName] -> do
-            connection <- createDatabase
-            stops <- queryAllStopPoints connection modeName
+        ["stop-points", modeN] -> do
+            -- | handeling input case sensitivity
+            let modeNameL = map toLower modeN
+            stops <- queryAllStopPoints connection modeNameL
             mapM_ print stops
 
          -- | Search for destinations
@@ -80,18 +86,20 @@ main = do
 
          -- | Print disruptions for all Kodes                    
         ["disruptions"] -> do
-            connection <- createDatabase
             modeNames <- queryAllMode connection
-            
+        
             mapM_ (\mode -> do
                 let urls = parseURLforDisruptionsAPI [mode] tflAppKey
-                mapM_ (\url -> do
+                disruptionsList <- fmap concat $ mapM (\url -> do
                     request <- parseRequest url
                     response <- httpLBS request
                     let jsonResponse = getResponseBody response
-                    queryAllDisruptions mode jsonResponse  -- Pass mode name along with the disruptions
+                    queryAllDisruptions mode jsonResponse
                     ) urls
-                ) modeNames
+
+                 -- Only print if there are disruptions
+                unless (null disruptionsList) $ printDisruptions mode disruptionsList
+                ) modeNames    
 
         
         _ -> syntaxError
@@ -112,6 +120,7 @@ syntaxError = putStrLn
     \search                 The user can search for a specific place\n\
     \modes                  Print all modes\n\
     \routes [modeName]      Print all routes for a specific mode\n\
+    \stop-points [modeName] Print all the stop points for a specific mode\n\
     \disruptions            Print all the disruptions\n"
     
 

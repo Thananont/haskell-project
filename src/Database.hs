@@ -254,7 +254,7 @@ printMatch match = do
 
 -- | Query to print all the disruptions
 -- | Funtion to print the disruption in a readble format 
-printDisruptions :: String -> DisruptionsResponse -> IO ()
+printDisruptions :: String -> [DisruptionDetail] -> IO ()
 printDisruptions modeName disruptions = do
     putStrLn $ "Disruptions for Mode: " ++ modeName
     mapM_ printDisruption disruptions
@@ -275,10 +275,12 @@ printDisruption disruption = do
     when (not $ null $ show update) $ putStrLn $ "Last Update: " ++ show update
     putStrLn "-----------------------------------"
 
-queryAllDisruptions :: String -> L8.ByteString -> IO ()
+queryAllDisruptions :: String -> L8.ByteString -> IO [DisruptionDetail]
 queryAllDisruptions modeName json =
     case parseDisruptions json of
-        Left err -> putStrLn $ "Error in parsing disruptions: " ++ err
-        Right disruptions -> printDisruptions modeName disruptions
+        Left err -> do
+            putStrLn $ "Error in parsing disruptions: " ++ err
+            return []
+        Right disruptions -> return disruptions
 
 

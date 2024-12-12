@@ -1,0 +1,848 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Types</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-4"></span><span>    </span><span class="annot"><a href="Types.html#URL"><span class="hs-identifier">URL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-5"></span><span>    </span><span class="annot"><a href="Types.html#MultipleURL"><span class="hs-identifier">MultipleURL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>    </span><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier">Mode</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>    </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier">ModeDB</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>    </span><span class="annot"><a href="Types.html#Modes"><span class="hs-identifier">Modes</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>    </span><span class="annot"><a href="Types.html#Route"><span class="hs-identifier">Route</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>    </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier">RouteDB</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>    </span><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier">RouteSection</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>    </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier">RouteSectionDB</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>    </span><span class="annot"><a href="Types.html#ServiceType"><span class="hs-identifier">ServiceType</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>    </span><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier">LineStatus</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>    </span><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier">Disruption</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>    </span><span class="annot"><a href="Types.html#Crowding"><span class="hs-identifier">Crowding</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>    </span><span class="annot"><a href="Types.html#DisruptionDetail"><span class="hs-identifier">DisruptionDetail</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-18"></span><span>    </span><span class="annot"><a href="Types.html#AffectedRoute"><span class="hs-identifier">AffectedRoute</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>    </span><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier">AffectedStop</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>    </span><span class="annot"><a href="Types.html#DisruptionsResponse"><span class="hs-identifier">DisruptionsResponse</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>    </span><span class="annot"><a href="Types.html#SearchDestination"><span class="hs-identifier">SearchDestination</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><a href="Types.html#Match"><span class="hs-identifier">Match</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Aeson</span></span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.SQLite.Simple</span></span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-keyword">type</span><span> </span><span id="URL"><span class="annot"><a href="Types.html#URL"><span class="hs-identifier hs-var">URL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">type</span><span> </span><span id="MultipleURL"><span class="annot"><a href="Types.html#MultipleURL"><span class="hs-identifier hs-var">MultipleURL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Data Structures for the Modes</span></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">data</span><span> </span><span id="Mode"><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier hs-var">Mode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Mode"><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier hs-var">Mode</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-34"></span><span>    </span><span id="isType"><span class="annot"><span class="annottext">Mode -&gt; String
+</span><a href="Types.html#isType"><span class="hs-identifier hs-var hs-var">isType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-35"></span><span>    </span><span id="isTflService"><span class="annot"><span class="annottext">Mode -&gt; Bool
+</span><a href="Types.html#isTflService"><span class="hs-identifier hs-var hs-var">isTflService</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-36"></span><span>    </span><span id="isFarePaying"><span class="annot"><span class="annottext">Mode -&gt; Bool
+</span><a href="Types.html#isFarePaying"><span class="hs-identifier hs-var hs-var">isFarePaying</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-37"></span><span>    </span><span id="isScheduledService"><span class="annot"><span class="annottext">Mode -&gt; Bool
+</span><a href="Types.html#isScheduledService"><span class="hs-identifier hs-var hs-var">isScheduledService</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-38"></span><span>    </span><span id="modeName"><span class="annot"><span class="annottext">Mode -&gt; String
+</span><a href="Types.html#modeName"><span class="hs-identifier hs-var hs-var">modeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-39"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109443"><span id="local-6989586621679109455"><span id="local-6989586621679109459"><span class="annot"><span class="annottext">Int -&gt; Mode -&gt; ShowS
+[Mode] -&gt; ShowS
+Mode -&gt; String
+(Int -&gt; Mode -&gt; ShowS)
+-&gt; (Mode -&gt; String) -&gt; ([Mode] -&gt; ShowS) -&gt; Show Mode
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Mode -&gt; ShowS
+showsPrec :: Int -&gt; Mode -&gt; ShowS
+$cshow :: Mode -&gt; String
+show :: Mode -&gt; String
+$cshowList :: [Mode] -&gt; ShowS
+showList :: [Mode] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109464"><span id="local-6989586621679109466"><span class="annot"><span class="annottext">(forall x. Mode -&gt; Rep Mode x)
+-&gt; (forall x. Rep Mode x -&gt; Mode) -&gt; Generic Mode
+forall x. Rep Mode x -&gt; Mode
+forall x. Mode -&gt; Rep Mode x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Mode -&gt; Rep Mode x
+from :: forall x. Mode -&gt; Rep Mode x
+$cto :: forall x. Rep Mode x -&gt; Mode
+to :: forall x. Rep Mode x -&gt; Mode
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span class="hs-keyword">type</span><span> </span><span id="Modes"><span class="annot"><a href="Types.html#Modes"><span class="hs-identifier hs-var">Modes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier hs-type">Mode</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span class="hs-keyword">data</span><span> </span><span id="ModeDB"><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-var">ModeDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ModeDB"><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-var">ModeDB</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-43"></span><span>    </span><span id="isTypeDB"><span class="annot"><span class="annottext">ModeDB -&gt; String
+</span><a href="Types.html#isTypeDB"><span class="hs-identifier hs-var hs-var">isTypeDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-44"></span><span>    </span><span id="isTflServiceDB"><span class="annot"><span class="annottext">ModeDB -&gt; Bool
+</span><a href="Types.html#isTflServiceDB"><span class="hs-identifier hs-var hs-var">isTflServiceDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>    </span><span id="isFarePayingDB"><span class="annot"><span class="annottext">ModeDB -&gt; Bool
+</span><a href="Types.html#isFarePayingDB"><span class="hs-identifier hs-var hs-var">isFarePayingDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>    </span><span id="isScheduledServiceDB"><span class="annot"><span class="annottext">ModeDB -&gt; Bool
+</span><a href="Types.html#isScheduledServiceDB"><span class="hs-identifier hs-var hs-var">isScheduledServiceDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>    </span><span id="modeNameDB"><span class="annot"><span class="annottext">ModeDB -&gt; String
+</span><a href="Types.html#modeNameDB"><span class="hs-identifier hs-var hs-var">modeNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-48"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109476"><span id="local-6989586621679109485"><span id="local-6989586621679109489"><span class="annot"><span class="annottext">Int -&gt; ModeDB -&gt; ShowS
+[ModeDB] -&gt; ShowS
+ModeDB -&gt; String
+(Int -&gt; ModeDB -&gt; ShowS)
+-&gt; (ModeDB -&gt; String) -&gt; ([ModeDB] -&gt; ShowS) -&gt; Show ModeDB
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; ModeDB -&gt; ShowS
+showsPrec :: Int -&gt; ModeDB -&gt; ShowS
+$cshow :: ModeDB -&gt; String
+show :: ModeDB -&gt; String
+$cshowList :: [ModeDB] -&gt; ShowS
+showList :: [ModeDB] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109492"><span id="local-6989586621679109494"><span class="annot"><span class="annottext">(forall x. ModeDB -&gt; Rep ModeDB x)
+-&gt; (forall x. Rep ModeDB x -&gt; ModeDB) -&gt; Generic ModeDB
+forall x. Rep ModeDB x -&gt; ModeDB
+forall x. ModeDB -&gt; Rep ModeDB x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. ModeDB -&gt; Rep ModeDB x
+from :: forall x. ModeDB -&gt; Rep ModeDB x
+$cto :: forall x. Rep ModeDB x -&gt; ModeDB
+to :: forall x. Rep ModeDB x -&gt; ModeDB
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109497"><span id="local-6989586621679109504"><span id="local-6989586621679109507"><span id="local-6989586621679109510"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-type">ModeDB</span></a></span></span></span></span></span><span>
+</span><span id="line-50"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-type">ModeDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-51"></span><span>    </span><span id="local-6989586621679109670"><span class="annot"><span class="annottext">fromRow :: RowParser ModeDB
+</span><a href="#local-6989586621679109670"><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB
+</span><a href="Types.html#ModeDB"><span class="hs-identifier hs-var">ModeDB</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB)
+-&gt; RowParser String
+-&gt; RowParser (Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB)
+-&gt; RowParser Bool -&gt; RowParser (Bool -&gt; Bool -&gt; String -&gt; ModeDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser Bool
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (Bool -&gt; Bool -&gt; String -&gt; ModeDB)
+-&gt; RowParser Bool -&gt; RowParser (Bool -&gt; String -&gt; ModeDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser Bool
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (Bool -&gt; String -&gt; ModeDB)
+-&gt; RowParser Bool -&gt; RowParser (String -&gt; ModeDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser Bool
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; ModeDB)
+-&gt; RowParser String -&gt; RowParser ModeDB
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | Data Structures for the Routes</span></span><span>
+</span><span id="line-54"></span><span class="hs-keyword">data</span><span> </span><span id="Route"><span class="annot"><a href="Types.html#Route"><span class="hs-identifier hs-var">Route</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Route"><span class="annot"><a href="Types.html#Route"><span class="hs-identifier hs-var">Route</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-55"></span><span>    </span><span id="routeIsType"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeIsType"><span class="hs-identifier hs-var hs-var">routeIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-56"></span><span>    </span><span id="routeId"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeId"><span class="hs-identifier hs-var hs-var">routeId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-57"></span><span>    </span><span id="routeName"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeName"><span class="hs-identifier hs-var hs-var">routeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-58"></span><span>    </span><span id="routeModeName"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeModeName"><span class="hs-identifier hs-var hs-var">routeModeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>    </span><span id="routeDisruptions"><span class="annot"><span class="annottext">Route -&gt; [Disruption]
+</span><a href="Types.html#routeDisruptions"><span class="hs-identifier hs-var hs-var">routeDisruptions</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-type">Disruption</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-60"></span><span>    </span><span id="routeCreated"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeCreated"><span class="hs-identifier hs-var hs-var">routeCreated</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>    </span><span id="routeModified"><span class="annot"><span class="annottext">Route -&gt; String
+</span><a href="Types.html#routeModified"><span class="hs-identifier hs-var hs-var">routeModified</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>    </span><span id="routeLineStatuses"><span class="annot"><span class="annottext">Route -&gt; [LineStatus]
+</span><a href="Types.html#routeLineStatuses"><span class="hs-identifier hs-var hs-var">routeLineStatuses</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-type">LineStatus</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-63"></span><span>    </span><span id="routeRouteSections"><span class="annot"><span class="annottext">Route -&gt; [RouteSection]
+</span><a href="Types.html#routeRouteSections"><span class="hs-identifier hs-var hs-var">routeRouteSections</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier hs-type">RouteSection</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109685"><span id="local-6989586621679109701"><span id="local-6989586621679109705"><span class="annot"><span class="annottext">Int -&gt; Route -&gt; ShowS
+[Route] -&gt; ShowS
+Route -&gt; String
+(Int -&gt; Route -&gt; ShowS)
+-&gt; (Route -&gt; String) -&gt; ([Route] -&gt; ShowS) -&gt; Show Route
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Route -&gt; ShowS
+showsPrec :: Int -&gt; Route -&gt; ShowS
+$cshow :: Route -&gt; String
+show :: Route -&gt; String
+$cshowList :: [Route] -&gt; ShowS
+showList :: [Route] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109711"><span id="local-6989586621679109713"><span class="annot"><span class="annottext">(forall x. Route -&gt; Rep Route x)
+-&gt; (forall x. Rep Route x -&gt; Route) -&gt; Generic Route
+forall x. Rep Route x -&gt; Route
+forall x. Route -&gt; Rep Route x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Route -&gt; Rep Route x
+from :: forall x. Route -&gt; Rep Route x
+$cto :: forall x. Rep Route x -&gt; Route
+to :: forall x. Rep Route x -&gt; Route
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="hs-keyword">data</span><span> </span><span id="RouteDB"><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-var">RouteDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RouteDB"><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-var">RouteDB</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-67"></span><span>    </span><span id="routeIdDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeIdDB"><span class="hs-identifier hs-var hs-var">routeIdDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-68"></span><span>    </span><span id="routeIsTypeDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeIsTypeDB"><span class="hs-identifier hs-var hs-var">routeIsTypeDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-69"></span><span>    </span><span id="routeNameDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeNameDB"><span class="hs-identifier hs-var hs-var">routeNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-70"></span><span>    </span><span id="routeModeNameDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeModeNameDB"><span class="hs-identifier hs-var hs-var">routeModeNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-71"></span><span>    </span><span id="routeCreatedDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeCreatedDB"><span class="hs-identifier hs-var hs-var">routeCreatedDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-72"></span><span>    </span><span id="routeModifiedDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
+</span><a href="Types.html#routeModifiedDB"><span class="hs-identifier hs-var hs-var">routeModifiedDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-73"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109723"><span id="local-6989586621679109733"><span id="local-6989586621679109737"><span class="annot"><span class="annottext">Int -&gt; RouteDB -&gt; ShowS
+[RouteDB] -&gt; ShowS
+RouteDB -&gt; String
+(Int -&gt; RouteDB -&gt; ShowS)
+-&gt; (RouteDB -&gt; String) -&gt; ([RouteDB] -&gt; ShowS) -&gt; Show RouteDB
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; RouteDB -&gt; ShowS
+showsPrec :: Int -&gt; RouteDB -&gt; ShowS
+$cshow :: RouteDB -&gt; String
+show :: RouteDB -&gt; String
+$cshowList :: [RouteDB] -&gt; ShowS
+showList :: [RouteDB] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109740"><span id="local-6989586621679109742"><span class="annot"><span class="annottext">(forall x. RouteDB -&gt; Rep RouteDB x)
+-&gt; (forall x. Rep RouteDB x -&gt; RouteDB) -&gt; Generic RouteDB
+forall x. Rep RouteDB x -&gt; RouteDB
+forall x. RouteDB -&gt; Rep RouteDB x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. RouteDB -&gt; Rep RouteDB x
+from :: forall x. RouteDB -&gt; Rep RouteDB x
+$cto :: forall x. Rep RouteDB x -&gt; RouteDB
+to :: forall x. Rep RouteDB x -&gt; RouteDB
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109745"><span id="local-6989586621679109752"><span id="local-6989586621679109755"><span id="local-6989586621679109758"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-type">RouteDB</span></a></span></span></span></span></span><span>
+</span><span id="line-75"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-type">RouteDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-76"></span><span>    </span><span id="local-6989586621679109886"><span class="annot"><span class="annottext">fromRow :: RowParser RouteDB
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB
+</span><a href="Types.html#RouteDB"><span class="hs-identifier hs-var">RouteDB</span></a></span><span> </span><span class="annot"><span class="annottext">(String
+ -&gt; String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
+-&gt; RowParser String
+-&gt; RowParser (String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
+-&gt; RowParser String
+-&gt; RowParser (String -&gt; String -&gt; String -&gt; RouteDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; String -&gt; RouteDB)
+-&gt; RowParser String -&gt; RowParser (String -&gt; String -&gt; RouteDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; RouteDB)
+-&gt; RowParser String -&gt; RowParser (String -&gt; RouteDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; RouteDB)
+-&gt; RowParser String -&gt; RowParser RouteDB
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span>
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span class="hs-keyword">data</span><span> </span><span id="RouteSection"><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier hs-var">RouteSection</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RouteSection"><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier hs-var">RouteSection</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-79"></span><span>    </span><span id="routeSectionIsType"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#routeSectionIsType"><span class="hs-identifier hs-var hs-var">routeSectionIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>    </span><span>
+</span><span id="line-80"></span><span>    </span><span id="routeSectionName"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#routeSectionName"><span class="hs-identifier hs-var hs-var">routeSectionName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-81"></span><span>    </span><span id="direction"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#direction"><span class="hs-identifier hs-var hs-var">direction</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-82"></span><span>    </span><span id="originationName"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#originationName"><span class="hs-identifier hs-var hs-var">originationName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-83"></span><span>    </span><span id="destinationName"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#destinationName"><span class="hs-identifier hs-var hs-var">destinationName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-84"></span><span>    </span><span id="originator"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#originator"><span class="hs-identifier hs-var hs-var">originator</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-85"></span><span>    </span><span id="destination"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#destination"><span class="hs-identifier hs-var hs-var">destination</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-86"></span><span>    </span><span id="serviceType"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#serviceType"><span class="hs-identifier hs-var hs-var">serviceType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-87"></span><span>    </span><span id="validTo"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#validTo"><span class="hs-identifier hs-var hs-var">validTo</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-88"></span><span>    </span><span id="validFrom"><span class="annot"><span class="annottext">RouteSection -&gt; String
+</span><a href="Types.html#validFrom"><span class="hs-identifier hs-var hs-var">validFrom</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-89"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109899"><span id="local-6989586621679109913"><span id="local-6989586621679109916"><span class="annot"><span class="annottext">Int -&gt; RouteSection -&gt; ShowS
+[RouteSection] -&gt; ShowS
+RouteSection -&gt; String
+(Int -&gt; RouteSection -&gt; ShowS)
+-&gt; (RouteSection -&gt; String)
+-&gt; ([RouteSection] -&gt; ShowS)
+-&gt; Show RouteSection
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; RouteSection -&gt; ShowS
+showsPrec :: Int -&gt; RouteSection -&gt; ShowS
+$cshow :: RouteSection -&gt; String
+show :: RouteSection -&gt; String
+$cshowList :: [RouteSection] -&gt; ShowS
+showList :: [RouteSection] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109919"><span id="local-6989586621679109921"><span class="annot"><span class="annottext">(forall x. RouteSection -&gt; Rep RouteSection x)
+-&gt; (forall x. Rep RouteSection x -&gt; RouteSection)
+-&gt; Generic RouteSection
+forall x. Rep RouteSection x -&gt; RouteSection
+forall x. RouteSection -&gt; Rep RouteSection x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. RouteSection -&gt; Rep RouteSection x
+from :: forall x. RouteSection -&gt; Rep RouteSection x
+$cto :: forall x. Rep RouteSection x -&gt; RouteSection
+to :: forall x. Rep RouteSection x -&gt; RouteSection
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="hs-keyword">data</span><span> </span><span id="RouteSectionDB"><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-var">RouteSectionDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RouteSectionDB"><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-var">RouteSectionDB</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-92"></span><span>    </span><span id="routeSectionNameDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#routeSectionNameDB"><span class="hs-identifier hs-var hs-var">routeSectionNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-93"></span><span>    </span><span id="routeSectionIsTypeDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#routeSectionIsTypeDB"><span class="hs-identifier hs-var hs-var">routeSectionIsTypeDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-94"></span><span>    </span><span id="routeModeNameKeyDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#routeModeNameKeyDB"><span class="hs-identifier hs-var hs-var">routeModeNameKeyDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-95"></span><span>    </span><span id="routeIdKeyDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#routeIdKeyDB"><span class="hs-identifier hs-var hs-var">routeIdKeyDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-96"></span><span>    </span><span id="directionDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#directionDB"><span class="hs-identifier hs-var hs-var">directionDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-97"></span><span>    </span><span id="originationNameDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#originationNameDB"><span class="hs-identifier hs-var hs-var">originationNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-98"></span><span>    </span><span id="destinationNameDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#destinationNameDB"><span class="hs-identifier hs-var hs-var">destinationNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-99"></span><span>    </span><span id="originatorDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#originatorDB"><span class="hs-identifier hs-var hs-var">originatorDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-100"></span><span>    </span><span id="destinationDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#destinationDB"><span class="hs-identifier hs-var hs-var">destinationDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-101"></span><span>    </span><span id="validToDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
+</span><a href="Types.html#validToDB"><span class="hs-identifier hs-var hs-var">validToDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-102"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109935"><span id="local-6989586621679109949"><span id="local-6989586621679109953"><span class="annot"><span class="annottext">Int -&gt; RouteSectionDB -&gt; ShowS
+[RouteSectionDB] -&gt; ShowS
+RouteSectionDB -&gt; String
+(Int -&gt; RouteSectionDB -&gt; ShowS)
+-&gt; (RouteSectionDB -&gt; String)
+-&gt; ([RouteSectionDB] -&gt; ShowS)
+-&gt; Show RouteSectionDB
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; RouteSectionDB -&gt; ShowS
+showsPrec :: Int -&gt; RouteSectionDB -&gt; ShowS
+$cshow :: RouteSectionDB -&gt; String
+show :: RouteSectionDB -&gt; String
+$cshowList :: [RouteSectionDB] -&gt; ShowS
+showList :: [RouteSectionDB] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109956"><span id="local-6989586621679109958"><span class="annot"><span class="annottext">(forall x. RouteSectionDB -&gt; Rep RouteSectionDB x)
+-&gt; (forall x. Rep RouteSectionDB x -&gt; RouteSectionDB)
+-&gt; Generic RouteSectionDB
+forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
+forall x. RouteSectionDB -&gt; Rep RouteSectionDB x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. RouteSectionDB -&gt; Rep RouteSectionDB x
+from :: forall x. RouteSectionDB -&gt; Rep RouteSectionDB x
+$cto :: forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
+to :: forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109961"><span id="local-6989586621679109968"><span id="local-6989586621679109971"><span id="local-6989586621679109974"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-type">RouteSectionDB</span></a></span></span></span></span></span><span>
+</span><span id="line-105"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-type">RouteSectionDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-106"></span><span>    </span><span id="local-6989586621679110164"><span class="annot"><span class="annottext">fromRow :: RowParser RouteSectionDB
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; String
+-&gt; RouteSectionDB
+</span><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-var">RouteSectionDB</span></a></span><span> </span><span class="annot"><span class="annottext">(String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; String
+ -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; RouteSectionDB)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; String
+      -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; String
+   -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser
+  (String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser
+     (String -&gt; String -&gt; String -&gt; String -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; String -&gt; String -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser (String -&gt; String -&gt; String -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; String -&gt; RouteSectionDB)
+-&gt; RowParser String
+-&gt; RowParser (String -&gt; String -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; String -&gt; RouteSectionDB)
+-&gt; RowParser String -&gt; RowParser (String -&gt; RouteSectionDB)
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span> </span><span class="annot"><span class="annottext">RowParser (String -&gt; RouteSectionDB)
+-&gt; RowParser String -&gt; RowParser RouteSectionDB
+forall a b. RowParser (a -&gt; b) -&gt; RowParser a -&gt; RowParser b
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">RowParser String
+forall a. FromField a =&gt; RowParser a
+</span><span class="hs-identifier hs-var">field</span></span><span>
+</span><span id="line-107"></span><span>
+</span><span id="line-108"></span><span class="hs-keyword">data</span><span> </span><span id="ServiceType"><span class="annot"><a href="Types.html#ServiceType"><span class="hs-identifier hs-var">ServiceType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ServiceType"><span class="annot"><a href="Types.html#ServiceType"><span class="hs-identifier hs-var">ServiceType</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-109"></span><span>    </span><span id="serviceTypeIsType"><span class="annot"><span class="annottext">ServiceType -&gt; String
+</span><a href="Types.html#serviceTypeIsType"><span class="hs-identifier hs-var hs-var">serviceTypeIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>   </span><span>
+</span><span id="line-110"></span><span>    </span><span id="serviceTypeName"><span class="annot"><span class="annottext">ServiceType -&gt; String
+</span><a href="Types.html#serviceTypeName"><span class="hs-identifier hs-var hs-var">serviceTypeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-111"></span><span>    </span><span id="serviceTypeUri"><span class="annot"><span class="annottext">ServiceType -&gt; String
+</span><a href="Types.html#serviceTypeUri"><span class="hs-identifier hs-var hs-var">serviceTypeUri</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-112"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110170"><span id="local-6989586621679110177"><span id="local-6989586621679110181"><span class="annot"><span class="annottext">Int -&gt; ServiceType -&gt; ShowS
+[ServiceType] -&gt; ShowS
+ServiceType -&gt; String
+(Int -&gt; ServiceType -&gt; ShowS)
+-&gt; (ServiceType -&gt; String)
+-&gt; ([ServiceType] -&gt; ShowS)
+-&gt; Show ServiceType
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; ServiceType -&gt; ShowS
+showsPrec :: Int -&gt; ServiceType -&gt; ShowS
+$cshow :: ServiceType -&gt; String
+show :: ServiceType -&gt; String
+$cshowList :: [ServiceType] -&gt; ShowS
+showList :: [ServiceType] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110184"><span id="local-6989586621679110186"><span class="annot"><span class="annottext">(forall x. ServiceType -&gt; Rep ServiceType x)
+-&gt; (forall x. Rep ServiceType x -&gt; ServiceType)
+-&gt; Generic ServiceType
+forall x. Rep ServiceType x -&gt; ServiceType
+forall x. ServiceType -&gt; Rep ServiceType x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. ServiceType -&gt; Rep ServiceType x
+from :: forall x. ServiceType -&gt; Rep ServiceType x
+$cto :: forall x. Rep ServiceType x -&gt; ServiceType
+to :: forall x. Rep ServiceType x -&gt; ServiceType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-113"></span><span>
+</span><span id="line-114"></span><span class="hs-keyword">data</span><span> </span><span id="LineStatus"><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-var">LineStatus</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="LineStatus"><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-var">LineStatus</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-115"></span><span>    </span><span id="lineStatusIsType"><span class="annot"><span class="annottext">LineStatus -&gt; String
+</span><a href="Types.html#lineStatusIsType"><span class="hs-identifier hs-var hs-var">lineStatusIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-116"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110191"><span id="local-6989586621679110196"><span id="local-6989586621679110199"><span class="annot"><span class="annottext">Int -&gt; LineStatus -&gt; ShowS
+[LineStatus] -&gt; ShowS
+LineStatus -&gt; String
+(Int -&gt; LineStatus -&gt; ShowS)
+-&gt; (LineStatus -&gt; String)
+-&gt; ([LineStatus] -&gt; ShowS)
+-&gt; Show LineStatus
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; LineStatus -&gt; ShowS
+showsPrec :: Int -&gt; LineStatus -&gt; ShowS
+$cshow :: LineStatus -&gt; String
+show :: LineStatus -&gt; String
+$cshowList :: [LineStatus] -&gt; ShowS
+showList :: [LineStatus] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110202"><span id="local-6989586621679110204"><span class="annot"><span class="annottext">(forall x. LineStatus -&gt; Rep LineStatus x)
+-&gt; (forall x. Rep LineStatus x -&gt; LineStatus) -&gt; Generic LineStatus
+forall x. Rep LineStatus x -&gt; LineStatus
+forall x. LineStatus -&gt; Rep LineStatus x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. LineStatus -&gt; Rep LineStatus x
+from :: forall x. LineStatus -&gt; Rep LineStatus x
+$cto :: forall x. Rep LineStatus x -&gt; LineStatus
+to :: forall x. Rep LineStatus x -&gt; LineStatus
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="hs-keyword">data</span><span> </span><span id="Disruption"><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-var">Disruption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Disruption"><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-var">Disruption</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-119"></span><span>    </span><span id="disruptionIsType"><span class="annot"><span class="annottext">Disruption -&gt; String
+</span><a href="Types.html#disruptionIsType"><span class="hs-identifier hs-var hs-var">disruptionIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span>
+</span><span id="line-120"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110209"><span id="local-6989586621679110214"><span id="local-6989586621679110217"><span class="annot"><span class="annottext">Int -&gt; Disruption -&gt; ShowS
+[Disruption] -&gt; ShowS
+Disruption -&gt; String
+(Int -&gt; Disruption -&gt; ShowS)
+-&gt; (Disruption -&gt; String)
+-&gt; ([Disruption] -&gt; ShowS)
+-&gt; Show Disruption
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Disruption -&gt; ShowS
+showsPrec :: Int -&gt; Disruption -&gt; ShowS
+$cshow :: Disruption -&gt; String
+show :: Disruption -&gt; String
+$cshowList :: [Disruption] -&gt; ShowS
+showList :: [Disruption] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110220"><span id="local-6989586621679110222"><span class="annot"><span class="annottext">(forall x. Disruption -&gt; Rep Disruption x)
+-&gt; (forall x. Rep Disruption x -&gt; Disruption) -&gt; Generic Disruption
+forall x. Rep Disruption x -&gt; Disruption
+forall x. Disruption -&gt; Rep Disruption x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Disruption -&gt; Rep Disruption x
+from :: forall x. Disruption -&gt; Rep Disruption x
+$cto :: forall x. Rep Disruption x -&gt; Disruption
+to :: forall x. Rep Disruption x -&gt; Disruption
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span class="hs-keyword">data</span><span> </span><span id="Crowding"><span class="annot"><a href="Types.html#Crowding"><span class="hs-identifier hs-var">Crowding</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Crowding"><span class="annot"><a href="Types.html#Crowding"><span class="hs-identifier hs-var">Crowding</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-123"></span><span>    </span><span id="crowdingIsType"><span class="annot"><span class="annottext">Crowding -&gt; String
+</span><a href="Types.html#crowdingIsType"><span class="hs-identifier hs-var hs-var">crowdingIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-124"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110227"><span id="local-6989586621679110232"><span id="local-6989586621679110236"><span class="annot"><span class="annottext">Int -&gt; Crowding -&gt; ShowS
+[Crowding] -&gt; ShowS
+Crowding -&gt; String
+(Int -&gt; Crowding -&gt; ShowS)
+-&gt; (Crowding -&gt; String) -&gt; ([Crowding] -&gt; ShowS) -&gt; Show Crowding
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Crowding -&gt; ShowS
+showsPrec :: Int -&gt; Crowding -&gt; ShowS
+$cshow :: Crowding -&gt; String
+show :: Crowding -&gt; String
+$cshowList :: [Crowding] -&gt; ShowS
+showList :: [Crowding] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110239"><span id="local-6989586621679110241"><span class="annot"><span class="annottext">(forall x. Crowding -&gt; Rep Crowding x)
+-&gt; (forall x. Rep Crowding x -&gt; Crowding) -&gt; Generic Crowding
+forall x. Rep Crowding x -&gt; Crowding
+forall x. Crowding -&gt; Rep Crowding x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Crowding -&gt; Rep Crowding x
+from :: forall x. Crowding -&gt; Rep Crowding x
+$cto :: forall x. Rep Crowding x -&gt; Crowding
+to :: forall x. Rep Crowding x -&gt; Crowding
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="annot"><span class="hs-comment">-- | Data Structures for the Search Feature (Extra Implementation)</span></span><span>
+</span><span id="line-127"></span><span class="hs-keyword">data</span><span> </span><span id="SearchDestination"><span class="annot"><a href="Types.html#SearchDestination"><span class="hs-identifier hs-var">SearchDestination</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SearchDestination"><span class="annot"><a href="Types.html#SearchDestination"><span class="hs-identifier hs-var">SearchDestination</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-128"></span><span>    </span><span id="searchDestinationTypeIsType"><span class="annot"><span class="annottext">SearchDestination -&gt; String
+</span><a href="Types.html#searchDestinationTypeIsType"><span class="hs-identifier hs-var hs-var">searchDestinationTypeIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-129"></span><span>    </span><span id="query"><span class="annot"><span class="annottext">SearchDestination -&gt; String
+</span><a href="Types.html#query"><span class="hs-identifier hs-var hs-var">query</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-130"></span><span>    </span><span id="total"><span class="annot"><span class="annottext">SearchDestination -&gt; Int
+</span><a href="Types.html#total"><span class="hs-identifier hs-var hs-var">total</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
+</span><span id="line-131"></span><span>    </span><span id="searchMatches"><span class="annot"><span class="annottext">SearchDestination -&gt; [Match]
+</span><a href="Types.html#searchMatches"><span class="hs-identifier hs-var hs-var">searchMatches</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Match"><span class="hs-identifier hs-type">Match</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-132"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110249"><span id="local-6989586621679110259"><span id="local-6989586621679110263"><span class="annot"><span class="annottext">Int -&gt; SearchDestination -&gt; ShowS
+[SearchDestination] -&gt; ShowS
+SearchDestination -&gt; String
+(Int -&gt; SearchDestination -&gt; ShowS)
+-&gt; (SearchDestination -&gt; String)
+-&gt; ([SearchDestination] -&gt; ShowS)
+-&gt; Show SearchDestination
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; SearchDestination -&gt; ShowS
+showsPrec :: Int -&gt; SearchDestination -&gt; ShowS
+$cshow :: SearchDestination -&gt; String
+show :: SearchDestination -&gt; String
+$cshowList :: [SearchDestination] -&gt; ShowS
+showList :: [SearchDestination] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110267"><span id="local-6989586621679110269"><span class="annot"><span class="annottext">(forall x. SearchDestination -&gt; Rep SearchDestination x)
+-&gt; (forall x. Rep SearchDestination x -&gt; SearchDestination)
+-&gt; Generic SearchDestination
+forall x. Rep SearchDestination x -&gt; SearchDestination
+forall x. SearchDestination -&gt; Rep SearchDestination x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. SearchDestination -&gt; Rep SearchDestination x
+from :: forall x. SearchDestination -&gt; Rep SearchDestination x
+$cto :: forall x. Rep SearchDestination x -&gt; SearchDestination
+to :: forall x. Rep SearchDestination x -&gt; SearchDestination
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span class="hs-keyword">data</span><span> </span><span id="Match"><span class="annot"><a href="Types.html#Match"><span class="hs-identifier hs-var">Match</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Match"><span class="annot"><a href="Types.html#Match"><span class="hs-identifier hs-var">Match</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-135"></span><span>    </span><span id="matchIsType"><span class="annot"><span class="annottext">Match -&gt; String
+</span><a href="Types.html#matchIsType"><span class="hs-identifier hs-var hs-var">matchIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-136"></span><span>    </span><span id="icsId"><span class="annot"><span class="annottext">Match -&gt; String
+</span><a href="Types.html#icsId"><span class="hs-identifier hs-var hs-var">icsId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-137"></span><span>    </span><span id="modes"><span class="annot"><span class="annottext">Match -&gt; [String]
+</span><a href="Types.html#modes"><span class="hs-identifier hs-var hs-var">modes</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-138"></span><span>    </span><span id="zone"><span class="annot"><span class="annottext">Match -&gt; Maybe String
+</span><a href="Types.html#zone"><span class="hs-identifier hs-var hs-var">zone</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-139"></span><span>    </span><span id="id"><span class="annot"><span class="annottext">Match -&gt; String
+</span><a href="Types.html#id"><span class="hs-identifier hs-var hs-var">id</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-140"></span><span>    </span><span id="searchName"><span class="annot"><span class="annottext">Match -&gt; String
+</span><a href="Types.html#searchName"><span class="hs-identifier hs-var hs-var">searchName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
+</span><span id="line-141"></span><span>    </span><span id="lat"><span class="annot"><span class="annottext">Match -&gt; Double
+</span><a href="Types.html#lat"><span class="hs-identifier hs-var hs-var">lat</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span>
+</span><span id="line-142"></span><span>    </span><span id="lon"><span class="annot"><span class="annottext">Match -&gt; Double
+</span><a href="Types.html#lon"><span class="hs-identifier hs-var hs-var">lon</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-143"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110281"><span id="local-6989586621679110295"><span id="local-6989586621679110298"><span class="annot"><span class="annottext">Int -&gt; Match -&gt; ShowS
+[Match] -&gt; ShowS
+Match -&gt; String
+(Int -&gt; Match -&gt; ShowS)
+-&gt; (Match -&gt; String) -&gt; ([Match] -&gt; ShowS) -&gt; Show Match
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Match -&gt; ShowS
+showsPrec :: Int -&gt; Match -&gt; ShowS
+$cshow :: Match -&gt; String
+show :: Match -&gt; String
+$cshowList :: [Match] -&gt; ShowS
+showList :: [Match] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110301"><span id="local-6989586621679110303"><span class="annot"><span class="annottext">(forall x. Match -&gt; Rep Match x)
+-&gt; (forall x. Rep Match x -&gt; Match) -&gt; Generic Match
+forall x. Rep Match x -&gt; Match
+forall x. Match -&gt; Rep Match x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Match -&gt; Rep Match x
+from :: forall x. Match -&gt; Rep Match x
+$cto :: forall x. Rep Match x -&gt; Match
+to :: forall x. Rep Match x -&gt; Match
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span class="annot"><span class="hs-comment">-- | Data Structures for the Disruptions (Extra Implementation)</span></span><span>
+</span><span id="line-146"></span><span class="hs-keyword">data</span><span> </span><span id="DisruptionDetail"><span class="annot"><a href="Types.html#DisruptionDetail"><span class="hs-identifier hs-var">DisruptionDetail</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DisruptionDetail"><span class="annot"><a href="Types.html#DisruptionDetail"><span class="hs-identifier hs-var">DisruptionDetail</span></a></span></span><span>
+</span><span id="line-147"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="category"><span class="annot"><span class="annottext">DisruptionDetail -&gt; String
+</span><a href="Types.html#category"><span class="hs-identifier hs-var hs-var">category</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-148"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="disruptionDetailIsType"><span class="annot"><span class="annottext">DisruptionDetail -&gt; String
+</span><a href="Types.html#disruptionDetailIsType"><span class="hs-identifier hs-var hs-var">disruptionDetailIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-149"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="description"><span class="annot"><span class="annottext">DisruptionDetail -&gt; String
+</span><a href="Types.html#description"><span class="hs-identifier hs-var hs-var">description</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-150"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="created"><span class="annot"><span class="annottext">DisruptionDetail -&gt; Maybe String
+</span><a href="Types.html#created"><span class="hs-identifier hs-var hs-var">created</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-151"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="lastUpdate"><span class="annot"><span class="annottext">DisruptionDetail -&gt; Maybe String
+</span><a href="Types.html#lastUpdate"><span class="hs-identifier hs-var hs-var">lastUpdate</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-152"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedRoutes"><span class="annot"><span class="annottext">DisruptionDetail -&gt; [AffectedRoute]
+</span><a href="Types.html#affectedRoutes"><span class="hs-identifier hs-var hs-var">affectedRoutes</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#AffectedRoute"><span class="hs-identifier hs-type">AffectedRoute</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-153"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedStops"><span class="annot"><span class="annottext">DisruptionDetail -&gt; [AffectedStop]
+</span><a href="Types.html#affectedStops"><span class="hs-identifier hs-var hs-var">affectedStops</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier hs-type">AffectedStop</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-154"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="closureText"><span class="annot"><span class="annottext">DisruptionDetail -&gt; Maybe String
+</span><a href="Types.html#closureText"><span class="hs-identifier hs-var hs-var">closureText</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-155"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110315"><span id="local-6989586621679110329"><span id="local-6989586621679110333"><span class="annot"><span class="annottext">Int -&gt; DisruptionDetail -&gt; ShowS
+[DisruptionDetail] -&gt; ShowS
+DisruptionDetail -&gt; String
+(Int -&gt; DisruptionDetail -&gt; ShowS)
+-&gt; (DisruptionDetail -&gt; String)
+-&gt; ([DisruptionDetail] -&gt; ShowS)
+-&gt; Show DisruptionDetail
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; DisruptionDetail -&gt; ShowS
+showsPrec :: Int -&gt; DisruptionDetail -&gt; ShowS
+$cshow :: DisruptionDetail -&gt; String
+show :: DisruptionDetail -&gt; String
+$cshowList :: [DisruptionDetail] -&gt; ShowS
+showList :: [DisruptionDetail] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110338"><span id="local-6989586621679110340"><span class="annot"><span class="annottext">(forall x. DisruptionDetail -&gt; Rep DisruptionDetail x)
+-&gt; (forall x. Rep DisruptionDetail x -&gt; DisruptionDetail)
+-&gt; Generic DisruptionDetail
+forall x. Rep DisruptionDetail x -&gt; DisruptionDetail
+forall x. DisruptionDetail -&gt; Rep DisruptionDetail x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. DisruptionDetail -&gt; Rep DisruptionDetail x
+from :: forall x. DisruptionDetail -&gt; Rep DisruptionDetail x
+$cto :: forall x. Rep DisruptionDetail x -&gt; DisruptionDetail
+to :: forall x. Rep DisruptionDetail x -&gt; DisruptionDetail
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-156"></span><span>
+</span><span id="line-157"></span><span class="hs-keyword">data</span><span> </span><span id="AffectedRoute"><span class="annot"><a href="Types.html#AffectedRoute"><span class="hs-identifier hs-var">AffectedRoute</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="AffectedRoute"><span class="annot"><a href="Types.html#AffectedRoute"><span class="hs-identifier hs-var">AffectedRoute</span></a></span></span><span>
+</span><span id="line-158"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="affectedRouteId"><span class="annot"><span class="annottext">AffectedRoute -&gt; String
+</span><a href="Types.html#affectedRouteId"><span class="hs-identifier hs-var hs-var">affectedRouteId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-159"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedRouteName"><span class="annot"><span class="annottext">AffectedRoute -&gt; String
+</span><a href="Types.html#affectedRouteName"><span class="hs-identifier hs-var hs-var">affectedRouteName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-160"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110346"><span id="local-6989586621679110352"><span id="local-6989586621679110355"><span class="annot"><span class="annottext">Int -&gt; AffectedRoute -&gt; ShowS
+[AffectedRoute] -&gt; ShowS
+AffectedRoute -&gt; String
+(Int -&gt; AffectedRoute -&gt; ShowS)
+-&gt; (AffectedRoute -&gt; String)
+-&gt; ([AffectedRoute] -&gt; ShowS)
+-&gt; Show AffectedRoute
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; AffectedRoute -&gt; ShowS
+showsPrec :: Int -&gt; AffectedRoute -&gt; ShowS
+$cshow :: AffectedRoute -&gt; String
+show :: AffectedRoute -&gt; String
+$cshowList :: [AffectedRoute] -&gt; ShowS
+showList :: [AffectedRoute] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110358"><span id="local-6989586621679110360"><span class="annot"><span class="annottext">(forall x. AffectedRoute -&gt; Rep AffectedRoute x)
+-&gt; (forall x. Rep AffectedRoute x -&gt; AffectedRoute)
+-&gt; Generic AffectedRoute
+forall x. Rep AffectedRoute x -&gt; AffectedRoute
+forall x. AffectedRoute -&gt; Rep AffectedRoute x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. AffectedRoute -&gt; Rep AffectedRoute x
+from :: forall x. AffectedRoute -&gt; Rep AffectedRoute x
+$cto :: forall x. Rep AffectedRoute x -&gt; AffectedRoute
+to :: forall x. Rep AffectedRoute x -&gt; AffectedRoute
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-161"></span><span>
+</span><span id="line-162"></span><span class="hs-keyword">data</span><span> </span><span id="AffectedStop"><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier hs-var">AffectedStop</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="AffectedStop"><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier hs-var">AffectedStop</span></a></span></span><span>
+</span><span id="line-163"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="affectedStopId"><span class="annot"><span class="annottext">AffectedStop -&gt; String
+</span><a href="Types.html#affectedStopId"><span class="hs-identifier hs-var hs-var">affectedStopId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-164"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedStopName"><span class="annot"><span class="annottext">AffectedStop -&gt; String
+</span><a href="Types.html#affectedStopName"><span class="hs-identifier hs-var hs-var">affectedStopName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-165"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110366"><span id="local-6989586621679110372"><span id="local-6989586621679110375"><span class="annot"><span class="annottext">Int -&gt; AffectedStop -&gt; ShowS
+[AffectedStop] -&gt; ShowS
+AffectedStop -&gt; String
+(Int -&gt; AffectedStop -&gt; ShowS)
+-&gt; (AffectedStop -&gt; String)
+-&gt; ([AffectedStop] -&gt; ShowS)
+-&gt; Show AffectedStop
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; AffectedStop -&gt; ShowS
+showsPrec :: Int -&gt; AffectedStop -&gt; ShowS
+$cshow :: AffectedStop -&gt; String
+show :: AffectedStop -&gt; String
+$cshowList :: [AffectedStop] -&gt; ShowS
+showList :: [AffectedStop] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110378"><span id="local-6989586621679110380"><span class="annot"><span class="annottext">(forall x. AffectedStop -&gt; Rep AffectedStop x)
+-&gt; (forall x. Rep AffectedStop x -&gt; AffectedStop)
+-&gt; Generic AffectedStop
+forall x. Rep AffectedStop x -&gt; AffectedStop
+forall x. AffectedStop -&gt; Rep AffectedStop x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. AffectedStop -&gt; Rep AffectedStop x
+from :: forall x. AffectedStop -&gt; Rep AffectedStop x
+$cto :: forall x. Rep AffectedStop x -&gt; AffectedStop
+to :: forall x. Rep AffectedStop x -&gt; AffectedStop
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-166"></span><span>
+</span><span id="line-167"></span><span class="hs-keyword">type</span><span> </span><span id="DisruptionsResponse"><span class="annot"><a href="Types.html#DisruptionsResponse"><span class="hs-identifier hs-var">DisruptionsResponse</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#DisruptionDetail"><span class="hs-identifier hs-type">DisruptionDetail</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-168"></span></pre></body></html>

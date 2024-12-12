@@ -1,10 +1,9 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
-
-
 module Database (
     dropAllTables,
+    dumpDatabase,
     initTables,
     insertModes,
     insertRoutesByMode,
@@ -16,19 +15,17 @@ module Database (
     printMatch,
     queryAllDisruptions,
     printDisruptions,
-    queryAllStopPoints,
-
+    queryAllStopPoints
 ) where
 
-import Data.Char (toUpper, toLower)
+import Data.Char
 import Types
 import Database.SQLite.Simple
-import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
+import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy.Char8 as L8
-import Data.Aeson (eitherDecode)
+import Data.Aeson
 import Parse
-import Control.Monad (when) 
-
+import Control.Monad
 
 fromBool :: Bool -> Int
 fromBool True = 1
@@ -37,9 +34,8 @@ fromBool False = 0
 createDatabase :: IO Connection
 createDatabase = open "haskell-project-database.db"
 
-initTables :: IO ()
-initTables = do
-    connection <- open "haskell-project-database.db"
+initTables :: Connection -> IO ()
+initTables connection = do
     execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
         \ modeName TEXT PRIMARY KEY, \
         \ isType TEXT, \
@@ -70,20 +66,16 @@ initTables = do
         \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName), \
         \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
-    close connection
 
-dropAllTables :: IO ()
-dropAllTables = do
-    connection <- open "haskell-project-database.db"
+dropAllTables :: Connection -> IO ()
+dropAllTables connection = do
     execute_ connection (Query $ "DROP TABLE IF EXISTS mode")
     execute_ connection (Query $ "DROP TABLE IF EXISTS route")
     execute_ connection (Query $ "DROP TABLE IF EXISTS routesection")
-    close connection
 
 -- Function that takes the modes and map them to be insert into the table
-insertModes :: [Mode] -> IO ()
-insertModes modes = do            
-    connection <- open "haskell-project-database.db"
+insertModes :: Connection -> [Mode] -> IO ()
+insertModes connection modes = do            
     execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
         \ modeName TEXT PRIMARY KEY, \
         \ isType TEXT, \
@@ -92,11 +84,10 @@ insertModes modes = do
         \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
         \ )"
     mapM_ (executeInsertMode connection) modes
-    close connection
 
 -- Function insert the modes to the table
 executeInsertMode :: Connection -> Mode -> IO ()
-executeInsertMode conn mode = execute conn "INSERT INTO mode ( \
+executeInsertMode connection mode = execute connection "INSERT INTO mode ( \
     \ modeName, \
     \ isType, \
     \ isTflService, \
@@ -111,9 +102,8 @@ executeInsertMode conn mode = execute conn "INSERT INTO mode ( \
     )
 
 -- Function that takes the routes and map them to be inserted into the table
-insertRoutesByMode :: [Route] -> IO ()
-insertRoutesByMode x = do            
-    connection <- open "haskell-project-database.db"
+insertRoutesByMode :: Connection -> [Route] -> IO ()
+insertRoutesByMode connection routes = do            
     execute_ connection "CREATE TABLE IF NOT EXISTS route ( \
         \ routeId TEXT PRIMARY KEY, \ 
         \ routeIsType TEXT, \ 
@@ -137,8 +127,7 @@ insertRoutesByMode x = do
         \ FOREIGN KEY (routeModeName) REFERENCES mode (modeName), \
         \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
-    mapM_ (executeInsertRoute connection) x
-    close connection
+    mapM_ (executeInsertRoute connection) routes
 
 -- Function insert the routes to the table and map the sections to be inserted into a table
 executeInsertRoute :: Connection -> Route -> IO ()
@@ -186,6 +175,29 @@ executeInsertRouteSection connection routeModeName routeId routeSection = do
         validTo routeSection
         )
 
+dumpDatabase :: Connection -> IO ()
+dumpDatabase connection = do
+    modes <- fetchModeData connection
+    routes <- fetchRouteData connection
+    routeSections <- fetchRouteSectionData connection
+    let jsonData = encode $ object ["modes" .= modes, "routes" .= routes, "routeSections" .= routeSections]
+    _ <- L8.writeFile "data.json" jsonData
+    putStrLn "The database data has been written to the JSON file!"
+
+fetchModeData :: Connection -> IO [ModeDB]
+fetchModeData connection = do
+    modes <- query_ connection "SELECT isType, isTflService, isFarePaying, isScheduledService, modeName FROM mode" :: IO [ModeDB]
+    return modes
+
+fetchRouteData :: Connection -> IO [RouteDB]
+fetchRouteData connection = do
+    routes <- query_ connection "SELECT routeIsType, routeName, routeModeName, routeCreated, routeModified, routeModeName FROM route" :: IO [RouteDB]
+    return routes
+
+fetchRouteSectionData :: Connection -> IO [RouteSectionDB]
+fetchRouteSectionData connection = do
+    routeSections <- query_ connection "SELECT routeSectionName, routeSectionIsType, routeModeName,routeId,direction,originationName, destinationName, originator, destination, validTo FROM routesection" :: IO [RouteSectionDB]
+    return routeSections
 
 -- | Query to print all the modes 
 queryAllMode :: Connection -> IO [String]
@@ -203,9 +215,7 @@ toUpperFirst (x:xs) = toUpper x : xs
 printModeName :: [String] -> IO ()
 printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 
-
 -- | EXTRA FEARURES IMPLEMENTATION
-
 -- | Query to print all the routes
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
@@ -230,8 +240,6 @@ queryAllStopPoints connection modeName =  do
     else
         return $ map fromOnly result
 
-
-
 -- | Query for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
 fetchStops tflAppKey searchDestination = do
@@ -250,8 +258,6 @@ printMatch match = do
     putStrLn $ "Available modes: " ++ show (modes match)
     putStrLn ""
            
-
-
 -- | Query to print all the disruptions
 -- | Funtion to print the disruption in a readble format 
 printDisruptions :: String -> [DisruptionDetail] -> IO ()

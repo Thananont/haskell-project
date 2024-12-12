@@ -33,7 +33,6 @@ renameFields "routeRouteSections" = "routeSections"
 renameFields "routeSectionIsType" = "$type"
 renameFields "routeSectionName" = "name"
 
-
 -- Rename Fields for Search Destination 
 renameFields "searchDestinationTypeIsType" = "$type"
 renameFields "query" = "query"
@@ -49,7 +48,6 @@ renameFields "id" = "id"
 renameFields "searchName" = "name"
 renameFields "lat" = "lat"
 renameFields "lon" = "lon"
-
 
 -- General Rename
 -- | Rename Fields for the Disruptions
@@ -117,4 +115,3 @@ parseURLforDisruptionsAPI modeName app_key = map (\mode -> firstPartUrl ++ mode 
 -- | Parses a ByteString containing JSON data into a list of Disruption objects.
 parseDisruptions :: L8.ByteString -> Either String DisruptionsResponse
 parseDisruptions json = eitherDecode json :: Either String DisruptionsResponse 
-

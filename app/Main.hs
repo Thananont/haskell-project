@@ -21,10 +21,12 @@ main = do
     case args of
         ["create"] -> do -- initialize the tables on the database
             initTables connection
+            print "Finished initializing the tables in the database"
             close connection
 
         ["drop"] -> do -- drop the three tables on the database
             dropAllTables connection
+            print "Finished dropping the tables in the database"
             close connection
 
         ["loaddata"] -> do -- download data from API and save to the database
@@ -48,6 +50,7 @@ main = do
                         Left err -> print err
                         Right allRoutes -> do
                             mapM_ (insertRoutesByMode connection) allRoutes
+            print "Finished loading and inserting data into the database"
             close connection
 
         ["dumpdata"] -> do
@@ -91,7 +94,6 @@ main = do
          -- | Print disruptions for all Kodes                    
         ["disruptions"] -> do
             modeNames <- queryAllMode connection
-        
             mapM_ (\mode -> do
                 let urls = parseURLforDisruptionsAPI [mode] tflAppKey
                 disruptionsList <- fmap concat $ mapM (\url -> do
@@ -100,7 +102,6 @@ main = do
                     let jsonResponse = getResponseBody response
                     queryAllDisruptions mode jsonResponse
                     ) urls
-
                  -- Only print if there are disruptions
                 unless (null disruptionsList) $ printDisruptions mode disruptionsList
                 ) modeNames    

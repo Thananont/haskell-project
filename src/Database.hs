@@ -219,7 +219,7 @@ printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 -- | Query to print all the routes
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
-    putStrLn $ "Please wait, Looking for all available routes for the" ++ modeName ++ "..."
+    putStrLn $ "Please wait, looking for all available routes for the " ++ modeName ++ "..."
     putStrLn $ "----------------------------------------------------------"
     let selectQuery = "SELECT routeName FROM route WHERE routeModeName = :routeModeName"
     results <- queryNamed  connection selectQuery [":routeModeName" := modeName] :: IO [Only String]

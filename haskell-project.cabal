@@ -6,7 +6,7 @@ cabal-version: 2.2
 
 name:           haskell-project
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/haskell-project#readme>
+description:    Please see the README on GitHub at <https://github.com/Thananont/haskell-project>
 homepage:       https://github.com/githubuser/haskell-project#readme
 bug-reports:    https://github.com/githubuser/haskell-project/issues
 author:         Author name here

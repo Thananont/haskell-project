@@ -2,9 +2,12 @@
 
 module Types (
     Mode(..),
+    ModeDB(..),
     Modes,
     Route(..),
+    RouteDB(..),
     RouteSection(..),
+    RouteSectionDB(..),
     ServiceType(..),
     LineStatus(..),
     Disruption(..),
@@ -19,6 +22,7 @@ module Types (
 
 import GHC.Generics
 import Data.Aeson (FromJSON, ToJSON)
+import Database.SQLite.Simple
 
 -- | Data Structures for the Modes
 data Mode = Mode {
@@ -28,8 +32,18 @@ data Mode = Mode {
     isScheduledService :: Bool,
     modeName :: String
 } deriving (Show, Generic)
-
 type Modes = [Mode]
+
+data ModeDB = ModeDB {
+    isTypeDB :: String, 
+    isTflServiceDB :: Bool,
+    isFarePayingDB :: Bool,
+    isScheduledServiceDB :: Bool,
+    modeNameDB :: String
+} deriving (Show, Generic)
+instance ToJSON ModeDB
+instance FromRow ModeDB where
+    fromRow = ModeDB <$> field <*> field <*> field <*> field <*> field
 
 -- | Data Structures for the Routes
 data Route = Route {
@@ -44,6 +58,18 @@ data Route = Route {
     routeRouteSections :: [RouteSection]
 } deriving (Show, Generic)
 
+data RouteDB = RouteDB {
+    routeIdDB :: String,
+    routeIsTypeDB :: String, 
+    routeNameDB :: String, 
+    routeModeNameDB :: String, 
+    routeCreatedDB :: String, 
+    routeModifiedDB :: String
+} deriving (Show, Generic)
+instance ToJSON RouteDB
+instance FromRow RouteDB where
+    fromRow = RouteDB <$> field <*> field <*> field <*> field <*> field <*> field
+
 data RouteSection = RouteSection {
     routeSectionIsType :: String,    
     routeSectionName :: String,
@@ -56,6 +82,23 @@ data RouteSection = RouteSection {
     validTo :: String,
     validFrom :: String
 } deriving (Show, Generic)
+
+data RouteSectionDB = RouteSectionDB {
+    routeSectionNameDB :: String, 
+    routeSectionIsTypeDB :: String, 
+    routeModeNameKeyDB :: String, 
+    routeIdKeyDB :: String, 
+    directionDB :: String, 
+    originationNameDB :: String, 
+    destinationNameDB :: String, 
+    originatorDB :: String, 
+    destinationDB :: String, 
+    validToDB :: String
+} deriving (Show, Generic)
+
+instance ToJSON RouteSectionDB
+instance FromRow RouteSectionDB where
+    fromRow = RouteSectionDB <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
 
 data ServiceType = ServiceType {
     serviceTypeIsType :: String,   

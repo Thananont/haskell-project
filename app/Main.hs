@@ -51,8 +51,8 @@ main = do
                         Right allRoutes -> do
                             mapM_ insertRoutesByMode allRoutes
 
-        
-        
+        ["dumpdata"] -> do
+            dumpDatabase connection
 
         -- | Print all modes
         ["modes"] -> do 
@@ -103,7 +103,6 @@ main = do
 
         
         _ -> syntaxError
-  
        
 
         

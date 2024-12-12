@@ -1,10 +1,9 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
-
-
 module Database (
     dropAllTables,
+    dumpDatabase,
     initTables,
     insertModes,
     insertRoutesByMode,
@@ -16,18 +15,19 @@ module Database (
     printMatch,
     queryAllDisruptions,
     printDisruptions,
-    queryAllStopPoints,
-
+    queryAllStopPoints
 ) where
 
 import Data.Char (toUpper, toLower)
+import Data.Text (Text)
 import Types
 import Database.SQLite.Simple
 import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
 import qualified Data.ByteString.Lazy.Char8 as L8
-import Data.Aeson (eitherDecode)
+import Data.Aeson
 import Parse
 import Control.Monad (when) 
+
 
 
 fromBool :: Bool -> Int
@@ -79,6 +79,31 @@ dropAllTables = do
     execute_ connection (Query $ "DROP TABLE IF EXISTS route")
     execute_ connection (Query $ "DROP TABLE IF EXISTS routesection")
     close connection
+
+dumpDatabase :: Connection -> IO ()
+dumpDatabase connection = do
+    modes <- fetchModeData connection
+    routes <- fetchRouteData connection
+    routeSections <- fetchRouteSectionData connection
+    close connection
+    let jsonData = encode $ object ["modes" .= modes, "routes" .= routes, "routeSections" .= routeSections]
+    _ <- L8.writeFile "data.json" jsonData
+    putStrLn "Database data has been written to the JSON file!"
+
+fetchModeData :: Connection -> IO [ModeDB]
+fetchModeData connection = do
+    modes <- query_ connection "SELECT isType, isTflService, isFarePaying, isScheduledService, modeName FROM mode" :: IO [ModeDB]
+    return modes
+
+fetchRouteData :: Connection -> IO [RouteDB]
+fetchRouteData connection = do
+    routes <- query_ connection "SELECT routeIsType, routeName, routeModeName, routeCreated, routeModified, routeModeName FROM route" :: IO [RouteDB]
+    return routes
+
+fetchRouteSectionData :: Connection -> IO [RouteSectionDB]
+fetchRouteSectionData connection = do
+    routeSections <- query_ connection "SELECT routeSectionName, routeSectionIsType, routeModeName,routeId,direction,originationName, destinationName, originator, destination, validTo FROM routesection" :: IO [RouteSectionDB]
+    return routeSections
 
 -- Function that takes the modes and map them to be insert into the table
 insertModes :: [Mode] -> IO ()

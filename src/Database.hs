@@ -104,7 +104,6 @@ executeInsertMode connection mode = execute connection "INSERT INTO mode ( \
 -- Function that takes the routes and map them to be inserted into the table
 insertRoutesByMode :: Connection -> [Route] -> IO ()
 insertRoutesByMode connection routes = do            
-    connection <- open "haskell-project-database.db"
     execute_ connection "CREATE TABLE IF NOT EXISTS route ( \
         \ routeId TEXT PRIMARY KEY, \ 
         \ routeIsType TEXT, \ 
@@ -129,7 +128,6 @@ insertRoutesByMode connection routes = do
         \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
     mapM_ (executeInsertRoute connection) routes
-    close connection
 
 -- Function insert the routes to the table and map the sections to be inserted into a table
 executeInsertRoute :: Connection -> Route -> IO ()

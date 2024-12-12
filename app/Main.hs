@@ -47,7 +47,7 @@ main = do
                     case sequence parsedFinal of
                         Left err -> print err
                         Right allRoutes -> do
-                            mapM_ insertRoutesByMode connection allRoutes
+                            mapM_ (insertRoutesByMode connection) allRoutes
             close connection
 
         ["dumpdata"] -> do

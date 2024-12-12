@@ -20,10 +20,12 @@ main = do
     args <- getArgs
     case args of
         ["create"] -> do -- initialize the tables on the database
-            initTables
+            initTables connection
+            close connection
 
         ["drop"] -> do -- drop the three tables on the database
-            dropAllTables
+            dropAllTables connection
+            close connection
 
         ["loaddata"] -> do -- download data from API and save to the database
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
@@ -33,7 +35,7 @@ main = do
                 Left err -> print err
                 Right modes -> do
                     -- Insert Modes into the database
-                    insertModes modes
+                    insertModes connection modes
                     -- Storing the modeName fields into a list of String to use them to the next API Call
                     let modeNames = map modeName modes
                     -- Concatenation of the URLs for the Routes API call
@@ -45,21 +47,25 @@ main = do
                     case sequence parsedFinal of
                         Left err -> print err
                         Right allRoutes -> do
-                            mapM_ insertRoutesByMode allRoutes
+                            mapM_ insertRoutesByMode connection allRoutes
+            close connection
 
         ["dumpdata"] -> do
             dumpDatabase connection
+            close connection
 
         -- | Print all modes
         ["modes"] -> do 
             modeNames <- queryAllMode connection
             printModeName modeNames
+            close connection
         
         -- | Print routes based on the Modes
         ["routes", modeN] -> do 
             let modenameL = map toLower modeN
             routes <- queryAllRoutes connection modenameL
             mapM_ print routes
+            close connection
 
          -- | Print stop points based on the Modes
         ["stop-points", modeN] -> do
@@ -67,6 +73,7 @@ main = do
             let modeNameL = map toLower modeN
             stops <- queryAllStopPoints connection modeNameL
             mapM_ print stops
+            close connection
 
          -- | Search for destinations
         ["search"] -> do
@@ -79,6 +86,7 @@ main = do
                     putStrLn "Found search data"
                     let matches = searchMatches searchData
                     mapM_ printMatch matches
+            close connection
 
          -- | Print disruptions for all Kodes                    
         ["disruptions"] -> do
@@ -96,13 +104,9 @@ main = do
                  -- Only print if there are disruptions
                 unless (null disruptionsList) $ printDisruptions mode disruptionsList
                 ) modeNames    
+            close connection
 
-        
         _ -> syntaxError
-       
-
-        
-
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 
 syntaxError :: IO ()
@@ -117,6 +121,3 @@ syntaxError = putStrLn
     \routes [modeName]      Print all routes for a specific mode\n\
     \stop-points [modeName] Print all the stop points for a specific mode\n\
     \disruptions            Print all the disruptions\n"
-    
-
-

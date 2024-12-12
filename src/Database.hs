@@ -19,7 +19,6 @@ module Database (
 ) where
 
 import Data.Char
-import Data.Text
 import Types
 import Database.SQLite.Simple
 import Network.HTTP.Simple

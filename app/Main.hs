@@ -1,18 +1,14 @@
 module Main (main) where
 
 import System.Environment
-import Database.SQLite.Simple (Connection, open)
-import Network.HTTP.Simple (httpLBS, parseRequest, getResponseBody)
-
-
-
-
+import Database.SQLite.Simple 
+import Network.HTTP.Simple
 import Database
 import Fetch
 import Parse
 import Types
-import Control.Monad (unless)
-import Data.Char (toLower)
+import Control.Monad
+import Data.Char 
 
 -- App Key Constant Definition
 tflAppKey :: String

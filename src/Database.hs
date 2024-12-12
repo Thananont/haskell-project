@@ -18,17 +18,15 @@ module Database (
     queryAllStopPoints
 ) where
 
-import Data.Char (toUpper, toLower)
-import Data.Text (Text)
+import Data.Char
+import Data.Text
 import Types
 import Database.SQLite.Simple
-import Network.HTTP.Simple (httpLBS, parseRequest_, getResponseBody)
+import Network.HTTP.Simple
 import qualified Data.ByteString.Lazy.Char8 as L8
 import Data.Aeson
 import Parse
-import Control.Monad (when) 
-
-
+import Control.Monad
 
 fromBool :: Bool -> Int
 fromBool True = 1
@@ -211,7 +209,6 @@ executeInsertRouteSection connection routeModeName routeId routeSection = do
         validTo routeSection
         )
 
-
 -- | Query to print all the modes 
 queryAllMode :: Connection -> IO [String]
 queryAllMode connection =  do
@@ -228,9 +225,7 @@ toUpperFirst (x:xs) = toUpper x : xs
 printModeName :: [String] -> IO ()
 printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 
-
 -- | EXTRA FEARURES IMPLEMENTATION
-
 -- | Query to print all the routes
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
@@ -255,8 +250,6 @@ queryAllStopPoints connection modeName =  do
     else
         return $ map fromOnly result
 
-
-
 -- | Query for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
 fetchStops tflAppKey searchDestination = do
@@ -275,8 +268,6 @@ printMatch match = do
     putStrLn $ "Available modes: " ++ show (modes match)
     putStrLn ""
            
-
-
 -- | Query to print all the disruptions
 -- | Funtion to print the disruption in a readble format 
 printDisruptions :: String -> [DisruptionDetail] -> IO ()

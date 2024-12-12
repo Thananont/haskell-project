@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Types (
+    URL,
+    MultipleURL,
     Mode(..),
     ModeDB(..),
     Modes,
@@ -21,8 +23,11 @@ module Types (
 ) where
 
 import GHC.Generics
-import Data.Aeson (FromJSON, ToJSON)
+import Data.Aeson
 import Database.SQLite.Simple
+
+type URL = String
+type MultipleURL = [String]
 
 -- | Data Structures for the Modes
 data Mode = Mode {

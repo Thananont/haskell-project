@@ -69,9 +69,9 @@ initTables connection = do
 
 dropAllTables :: Connection -> IO ()
 dropAllTables connection = do
-    execute_ connection (Query $ "DROP TABLE IF EXISTS mode")
-    execute_ connection (Query $ "DROP TABLE IF EXISTS route")
-    execute_ connection (Query $ "DROP TABLE IF EXISTS routesection")
+    execute_ connection "DROP TABLE IF EXISTS mode"
+    execute_ connection "DROP TABLE IF EXISTS route"
+    execute_ connection "DROP TABLE IF EXISTS routesection"
 
 -- Function that takes the modes and map them to be insert into the table
 insertModes :: Connection -> [Mode] -> IO ()

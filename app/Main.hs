@@ -73,7 +73,7 @@ main = do
             printModeName modeNames
             close connection
         
-        -- | Print all of the routes based on the inputted mode
+        -- | Print all of the routes based on the input mode
         ["routes", modeN] -> do 
             let modenameL = map toLower modeN
             routes <- queryAllRoutes connection modenameL

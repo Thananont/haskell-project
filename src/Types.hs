@@ -26,6 +26,7 @@ import GHC.Generics
 import Data.Aeson
 import Database.SQLite.Simple
 
+-- | Type Aliases for the URLs
 type URL = String
 type MultipleURL = [String]
 
@@ -77,6 +78,7 @@ instance ToJSON RouteDB
 instance FromRow RouteDB where
     fromRow = RouteDB <$> field <*> field <*> field <*> field <*> field <*> field
 
+-- | Data Structure for RouteSection part of the Routes API
 data RouteSection = RouteSection {
     routeSectionIsType :: String,    
     routeSectionName :: String,
@@ -108,20 +110,19 @@ instance ToJSON RouteSectionDB
 instance FromRow RouteSectionDB where
     fromRow = RouteSectionDB <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
 
+-- | Data Structure that represents the service type of a route
 data ServiceType = ServiceType {
     serviceTypeIsType :: String,   
     serviceTypeName :: String,
     serviceTypeUri :: String
 } deriving (Show, Generic)
 
+-- | Data Structure that represents the line status of a route
 data LineStatus = LineStatus {
     lineStatusIsType :: String
 } deriving (Show, Generic)
 
-data Disruption = Disruption {
-    disruptionIsType :: String 
-} deriving (Show, Generic)
-
+-- | Data Structure that represents crowding information
 data Crowding = Crowding {
     crowdingIsType :: String
 } deriving (Show, Generic)
@@ -134,6 +135,7 @@ data SearchDestination = SearchDestination {
     searchMatches :: [Match]
 } deriving (Show, Generic)
 
+-- | Data Structure that represents the search result matches
 data Match = Match {
     matchIsType :: String,
     icsId :: String,
@@ -146,6 +148,13 @@ data Match = Match {
 } deriving (Show, Generic)
 
 -- | Data Structures for the Disruptions (Extra Implementation)
+
+-- | Data Structure that represents disruption information for a route
+data Disruption = Disruption {
+    disruptionIsType :: String 
+} deriving (Show, Generic)
+
+-- | Data Structure that represents disruption details
 data DisruptionDetail = DisruptionDetail
     { category :: String
     , disruptionDetailIsType :: String
@@ -157,11 +166,13 @@ data DisruptionDetail = DisruptionDetail
     , closureText :: Maybe String
     } deriving (Show, Generic)
 
+-- | Data Structure that represents routes affected by a disruption
 data AffectedRoute = AffectedRoute
     { affectedRouteId :: String
     , affectedRouteName :: String
     } deriving (Show, Generic)
 
+-- | Data Structure that represents stops affected by a disruption
 data AffectedStop = AffectedStop
     { affectedStopId :: String
     , affectedStopName :: String

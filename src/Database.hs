@@ -283,7 +283,7 @@ printDisruption disruption = do
     when (not $ null stops) $ putStrLn $ "Affected Stops: " ++ show (map affectedStopName stops)
     when (not $ null $ show update) $ putStrLn $ "Last Update: " ++ show update
     putStrLn "-----------------------------------"
-
+-- | Funtion to fetch and print all the disruptions  
 queryAllDisruptions :: L8.ByteString -> IO [DisruptionDetail]
 queryAllDisruptions json =
     case parseDisruptions json of

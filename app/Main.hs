@@ -10,7 +10,6 @@ import Types
 import Control.Monad
 import Data.Char 
 import Configuration.Dotenv (loadFile, defaultConfig)
-import System.Environment (lookupEnv)
 
 main :: IO ()
 main = do
@@ -45,11 +44,11 @@ main = do
             json <- download url
             case parseModes json of
                 Left err -> print err
-                Right modes -> do
+                Right modeList -> do
                     -- Insert Modes into the database
-                    insertModes connection modes
+                    insertModes connection modeList
                     -- Storing the modeName fields into a list of String to use them to the next API Call
-                    let modeNames = map modeName modes
+                    let modeNames = map modeName modeList
                     -- Concatenation of the URLs for the Routes API call
                     let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
                     -- Second API Call - Routes
@@ -97,12 +96,12 @@ main = do
             case result of
                 Left err -> putStrLn ("Error parsing JSON: " ++ err)
                 Right searchData -> do
-                    let result = searchMatches searchData
-                    if null result then
+                    let searchResult = searchMatches searchData
+                    if null searchResult then
                         putStrLn "Destination not found"
                     else do
                         putStrLn "Found search data"
-                        mapM_ printMatch result
+                        mapM_ printMatch searchResult
             close connection
 
          -- | Print out real time disruptions occuring on the inputted mode              
@@ -114,7 +113,7 @@ main = do
                     request <- parseRequest url
                     response <- httpLBS request
                     let jsonResponse = getResponseBody response
-                    queryAllDisruptions mode jsonResponse
+                    queryAllDisruptions jsonResponse
                     ) urls
                  -- Only print if there are disruptions
                 unless (null disruptionsList) $ printDisruptions mode disruptionsList

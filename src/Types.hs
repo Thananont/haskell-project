@@ -29,7 +29,7 @@ import Database.SQLite.Simple
 type URL = String
 type MultipleURL = [String]
 
--- | Data Structures for the Modes
+-- | Data Structure for Mode
 data Mode = Mode {
     isType :: String, 
     isTflService :: Bool,
@@ -39,6 +39,7 @@ data Mode = Mode {
 } deriving (Show, Generic)
 type Modes = [Mode]
 
+-- | Data Structure for ModeDB obtained querying modes from the database
 data ModeDB = ModeDB {
     isTypeDB :: String, 
     isTflServiceDB :: Bool,
@@ -50,7 +51,7 @@ instance ToJSON ModeDB
 instance FromRow ModeDB where
     fromRow = ModeDB <$> field <*> field <*> field <*> field <*> field
 
--- | Data Structures for the Routes
+-- | Data Structure for the Route
 data Route = Route {
     routeIsType :: String,
     routeId :: String,
@@ -63,6 +64,7 @@ data Route = Route {
     routeRouteSections :: [RouteSection]
 } deriving (Show, Generic)
 
+-- | Data Structure for RouteDB obtained querying routes from the database
 data RouteDB = RouteDB {
     routeIdDB :: String,
     routeIsTypeDB :: String, 
@@ -88,6 +90,7 @@ data RouteSection = RouteSection {
     validFrom :: String
 } deriving (Show, Generic)
 
+-- | Data Structure for RouteSectionDB obtained querying routesections from the database
 data RouteSectionDB = RouteSectionDB {
     routeSectionNameDB :: String, 
     routeSectionIsTypeDB :: String, 

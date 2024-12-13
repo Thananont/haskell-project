@@ -9,13 +9,20 @@ import Parse
 import Types
 import Control.Monad
 import Data.Char 
-
--- App Key Constant Definition
-tflAppKey :: String
-tflAppKey = "270923a7a73f4dccab574faba91fa8b4"
+import Configuration.Dotenv (loadFile, defaultConfig)
+import System.Environment (lookupEnv)
 
 main :: IO ()
 main = do
+    loadFile defaultConfig
+
+    maybeTflAppKey <- lookupEnv "TFL_APP_KEY"
+    tflAppKey <- case maybeTflAppKey of
+        Just value -> return value
+        Nothing -> do
+            putStrLn "Error: TFL_APP_KEY is not set in the .env file"
+            error "Missing TFL_APP_KEY"
+
     connection <- createDatabase
     args <- getArgs
     case args of

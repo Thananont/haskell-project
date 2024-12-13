@@ -116,6 +116,7 @@ syntaxError = putStrLn
     \\n\
     \create                 Create sqlite database and tables\n\
     \loaddata               Download data from API and save to the database\n\
+    \drop                   Drop the three tables on the database\n\
     \dumpdata               Generate data.json file with all data on database\n\
     \search                 The user can search for a specific place\n\
     \modes                  Print all modes\n\

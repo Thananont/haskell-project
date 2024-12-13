@@ -26,17 +26,20 @@ main = do
     connection <- createDatabase
     args <- getArgs
     case args of
-        ["create"] -> do -- initialize the tables on the database
+        -- | Initialize the three tables, mode, route, and routesection on the database
+        ["create"] -> do
             initTables connection
             print "Finished initializing the tables in the database"
             close connection
 
-        ["drop"] -> do -- drop the three tables on the database
+        -- | Drop the three tables on the database
+        ["drop"] -> do
             dropAllTables connection
             print "Finished dropping the tables in the database"
             close connection
 
-        ["loaddata"] -> do -- download data from API and save to the database
+        -- Download data from the TFL APIs and save them to the database
+        ["loaddata"] -> do
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
             print "Downloading"
             json <- download url
@@ -60,24 +63,25 @@ main = do
             print "Finished loading and inserting data into the database"
             close connection
 
+        -- Dump the data from the database in a data.json file
         ["dumpdata"] -> do
             dumpDatabase connection
             close connection
 
-        -- | Print all modes
+        -- | Print all the modes of transportation in the database
         ["modes"] -> do 
             modeNames <- queryAllMode connection
             printModeName modeNames
             close connection
         
-        -- | Print routes based on the Modes
+        -- | Print all of the routes based on the inputted mode
         ["routes", modeN] -> do 
             let modenameL = map toLower modeN
             routes <- queryAllRoutes connection modenameL
             mapM_ print routes
             close connection
 
-         -- | Print stop points based on the Modes
+         -- | Print all of the stop points based on the inputted mode
         ["stop-points", modeN] -> do
             -- | handeling input case sensitivity
             let modeNameL = map toLower modeN
@@ -85,7 +89,7 @@ main = do
             mapM_ print stops
             close connection
 
-         -- | Search for destinations
+         -- | Search for destinations and print out its details
         ["search"] -> do
             putStrLn "Please enter your destination:"
             searchDestination <- getLine
@@ -101,7 +105,7 @@ main = do
                         mapM_ printMatch result
             close connection
 
-         -- | Print disruptions for all Kodes                    
+         -- | Print out real time disruptions occuring on the inputted mode              
         ["disruptions"] -> do
             modeNames <- queryAllMode connection
             mapM_ (\mode -> do

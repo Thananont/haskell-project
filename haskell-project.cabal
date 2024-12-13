@@ -40,6 +40,7 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
+    , dotenv
     , http-conduit
     , sqlite-simple
     , text
@@ -58,6 +59,7 @@ executable haskell-project-exe
       aeson
     , base >=4.7 && <5
     , bytestring
+    , dotenv
     , haskell-project
     , http-conduit
     , sqlite-simple
@@ -78,6 +80,7 @@ test-suite haskell-project-test
       aeson
     , base >=4.7 && <5
     , bytestring
+    , dotenv
     , haskell-project
     , http-conduit
     , sqlite-simple

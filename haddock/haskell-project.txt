@@ -8,10 +8,12 @@
 @version 0.1.0.0
 
 module Types
+
+-- | Type Aliases for the URLs
 type URL = String
 type MultipleURL = [String]
 
--- | Data Structures for the Modes
+-- | Data Structure for Mode
 data Mode
 Mode :: String -> Bool -> Bool -> Bool -> String -> Mode
 [isType] :: Mode -> String
@@ -19,6 +21,8 @@ Mode :: String -> Bool -> Bool -> Bool -> String -> Mode
 [isFarePaying] :: Mode -> Bool
 [isScheduledService] :: Mode -> Bool
 [modeName] :: Mode -> String
+
+-- | Data Structure for ModeDB obtained querying modes from the database
 data ModeDB
 ModeDB :: String -> Bool -> Bool -> Bool -> String -> ModeDB
 [isTypeDB] :: ModeDB -> String
@@ -28,7 +32,7 @@ ModeDB :: String -> Bool -> Bool -> Bool -> String -> ModeDB
 [modeNameDB] :: ModeDB -> String
 type Modes = [Mode]
 
--- | Data Structures for the Routes
+-- | Data Structure for the Route
 data Route
 Route :: String -> String -> String -> String -> [Disruption] -> String -> String -> [LineStatus] -> [RouteSection] -> Route
 [routeIsType] :: Route -> String
@@ -40,6 +44,8 @@ Route :: String -> String -> String -> String -> [Disruption] -> String -> Strin
 [routeModified] :: Route -> String
 [routeLineStatuses] :: Route -> [LineStatus]
 [routeRouteSections] :: Route -> [RouteSection]
+
+-- | Data Structure for RouteDB obtained querying routes from the database
 data RouteDB
 RouteDB :: String -> String -> String -> String -> String -> String -> RouteDB
 [routeIdDB] :: RouteDB -> String
@@ -48,6 +54,8 @@ RouteDB :: String -> String -> String -> String -> String -> String -> RouteDB
 [routeModeNameDB] :: RouteDB -> String
 [routeCreatedDB] :: RouteDB -> String
 [routeModifiedDB] :: RouteDB -> String
+
+-- | Data Structure for RouteSection part of the Routes API
 data RouteSection
 RouteSection :: String -> String -> String -> String -> String -> String -> String -> String -> String -> String -> RouteSection
 [routeSectionIsType] :: RouteSection -> String
@@ -60,6 +68,9 @@ RouteSection :: String -> String -> String -> String -> String -> String -> Stri
 [serviceType] :: RouteSection -> String
 [validTo] :: RouteSection -> String
 [validFrom] :: RouteSection -> String
+
+-- | Data Structure for RouteSectionDB obtained querying routesections from
+--   the database
 data RouteSectionDB
 RouteSectionDB :: String -> String -> String -> String -> String -> String -> String -> String -> String -> String -> RouteSectionDB
 [routeSectionNameDB] :: RouteSectionDB -> String
@@ -72,22 +83,32 @@ RouteSectionDB :: String -> String -> String -> String -> String -> String -> St
 [originatorDB] :: RouteSectionDB -> String
 [destinationDB] :: RouteSectionDB -> String
 [validToDB] :: RouteSectionDB -> String
+
+-- | Data Structure that represents the service type of a route
 data ServiceType
 ServiceType :: String -> String -> String -> ServiceType
 [serviceTypeIsType] :: ServiceType -> String
 [serviceTypeName] :: ServiceType -> String
 [serviceTypeUri] :: ServiceType -> String
+
+-- | Data Structure that represents the line status of a route
 data LineStatus
 LineStatus :: String -> LineStatus
 [lineStatusIsType] :: LineStatus -> String
+
+-- | Data Structures for the Disruptions (Extra Implementation)
+--   
+--   Data Structure that represents disruption information for a route
 data Disruption
 Disruption :: String -> Disruption
 [disruptionIsType] :: Disruption -> String
+
+-- | Data Structure that represents crowding information
 data Crowding
 Crowding :: String -> Crowding
 [crowdingIsType] :: Crowding -> String
 
--- | Data Structures for the Disruptions (Extra Implementation)
+-- | Data Structure that represents disruption details
 data DisruptionDetail
 DisruptionDetail :: String -> String -> String -> Maybe String -> Maybe String -> [AffectedRoute] -> [AffectedStop] -> Maybe String -> DisruptionDetail
 [category] :: DisruptionDetail -> String
@@ -98,10 +119,14 @@ DisruptionDetail :: String -> String -> String -> Maybe String -> Maybe String -
 [affectedRoutes] :: DisruptionDetail -> [AffectedRoute]
 [affectedStops] :: DisruptionDetail -> [AffectedStop]
 [closureText] :: DisruptionDetail -> Maybe String
+
+-- | Data Structure that represents routes affected by a disruption
 data AffectedRoute
 AffectedRoute :: String -> String -> AffectedRoute
 [affectedRouteId] :: AffectedRoute -> String
 [affectedRouteName] :: AffectedRoute -> String
+
+-- | Data Structure that represents stops affected by a disruption
 data AffectedStop
 AffectedStop :: String -> String -> AffectedStop
 [affectedStopId] :: AffectedStop -> String
@@ -115,6 +140,8 @@ SearchDestination :: String -> String -> Int -> [Match] -> SearchDestination
 [query] :: SearchDestination -> String
 [total] :: SearchDestination -> Int
 [searchMatches] :: SearchDestination -> [Match]
+
+-- | Data Structure that represents the search result matches
 data Match
 Match :: String -> String -> [String] -> Maybe String -> String -> String -> Double -> Double -> Match
 [matchIsType] :: Match -> String
@@ -139,16 +166,16 @@ instance GHC.Generics.Generic Types.ServiceType
 instance GHC.Show.Show Types.ServiceType
 instance GHC.Generics.Generic Types.LineStatus
 instance GHC.Show.Show Types.LineStatus
-instance GHC.Generics.Generic Types.Disruption
-instance GHC.Show.Show Types.Disruption
-instance GHC.Generics.Generic Types.Route
-instance GHC.Show.Show Types.Route
 instance GHC.Generics.Generic Types.Crowding
 instance GHC.Show.Show Types.Crowding
 instance GHC.Generics.Generic Types.Match
 instance GHC.Show.Show Types.Match
 instance GHC.Generics.Generic Types.SearchDestination
 instance GHC.Show.Show Types.SearchDestination
+instance GHC.Generics.Generic Types.Disruption
+instance GHC.Show.Show Types.Disruption
+instance GHC.Generics.Generic Types.Route
+instance GHC.Show.Show Types.Route
 instance GHC.Generics.Generic Types.AffectedRoute
 instance GHC.Show.Show Types.AffectedRoute
 instance GHC.Generics.Generic Types.AffectedStop
@@ -202,32 +229,53 @@ download :: URL -> IO ByteString
 downloadMultiple :: MultipleURL -> IO [ByteString]
 
 module Database
+
+-- | A function that drops the mode, route, and routesection table from the
+--   database
 dropAllTables :: Connection -> IO ()
+
+-- | A function that dump the data from the database into a json file
 dumpDatabase :: Connection -> IO ()
+
+-- | A function that initializes the tables in the database
 initTables :: Connection -> IO ()
+
+-- | A function that takes the modes list and map them to the
+--   executeInsertMode function to insert them into the table, create the
+--   table if it doesn't exist
 insertModes :: Connection -> [Mode] -> IO ()
+
+-- | A function that takes the route list and map them to the
+--   executeInsertRoute function to insert them into the tables, create the
+--   tables if it doesn't exist
 insertRoutesByMode :: Connection -> [Route] -> IO ()
 
--- | Query to print all the modes
+-- | A function that queries to print all of the name of the modes in the
+--   database
 queryAllMode :: Connection -> IO [String]
 
--- | EXTRA FEARURES IMPLEMENTATION | Query to print all the routes
+-- | A function that queries to print all name of the routes from a mode in
+--   the database
 queryAllRoutes :: Connection -> String -> IO [String]
+
+-- | A function that creates a connection with the database
 createDatabase :: IO Connection
 
--- | Function to print mode name with the first letter in uppercase
+-- | A function that prints a mode's name with the first letter in
+--   uppercase
 printModeName :: [String] -> IO ()
 
--- | Query for the search function
+-- | A function that queries for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
 
--- | Funtion to do a pretty print
+-- | A function to do a pretty print
 printMatch :: Match -> IO ()
-queryAllDisruptions :: String -> ByteString -> IO [DisruptionDetail]
+queryAllDisruptions :: ByteString -> IO [DisruptionDetail]
 
--- | Query to print all the disruptions | Funtion to print the disruption
---   in a readble format
+-- | A function that maps the disruptions to the printDisruption to be
+--   printed for each disruption of each mode
 printDisruptions :: String -> [DisruptionDetail] -> IO ()
 
--- | Query for all stop points
+-- | A function that queries for all stop points from a mode in the
+--   database
 queryAllStopPoints :: Connection -> String -> IO [String]

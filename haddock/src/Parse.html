@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Parse</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-4"></span><span>    </span><span class="annot"><a href="Parse.html#parseModes"><span class="hs-identifier">parseModes</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-5"></span><span>    </span><span class="annot"><a href="Parse.html#parseURLforRoutesAPI"><span class="hs-identifier">parseURLforRoutesAPI</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>    </span><span class="annot"><a href="Parse.html#parseRoutes"><span class="hs-identifier">parseRoutes</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>    </span><span class="annot"><a href="Parse.html#parseURLforDisruptionsAPI"><span class="hs-identifier">parseURLforDisruptionsAPI</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>    </span><span class="annot"><a href="Parse.html#parseDisruptions"><span class="hs-identifier">parseDisruptions</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>    </span><span class="annot"><a href="Parse.html#parseSearchDestination"><span class="hs-identifier">parseSearchDestination</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Types.html"><span class="hs-identifier">Types</span></a></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Aeson</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.ByteString.Lazy.Char8</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">L8</span></span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Function to rename fields in the JSON to match Haskell data type field names.</span></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-type">renameFields</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Rename Fields for the Modes</span></span><span>
+</span><span id="line-20"></span><span id="renameFields"><span class="annot"><span class="annottext">renameFields :: String -&gt; String
+</span><a href="Parse.html#renameFields"><span class="hs-identifier hs-var hs-var">renameFields</span></a></span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;isType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- | Rename Fields for the Routes</span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeIsType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeId&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;id&quot;</span></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeName&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;name&quot;</span></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeModeName&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;modeName&quot;</span></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeDisruptions&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;disruptions&quot;</span></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeCreated&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;created&quot;</span></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeModified&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;modified&quot;</span></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeLineStatuses&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;lineStatuses&quot;</span></span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeRouteSections&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeSections&quot;</span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- | Rename Fields for the Routes Section</span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeSectionIsType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;routeSectionName&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;name&quot;</span></span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- Rename Fields for Search Destination </span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;searchDestinationTypeIsType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-39"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;query&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;query&quot;</span></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;total&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;total&quot;</span></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;searchMatches&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;matches&quot;</span></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="hs-comment">-- Rename Fields for Match</span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;matchIsType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;icsId&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;icsId&quot;</span></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;modes&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;modes&quot;</span></span><span>
+</span><span id="line-47"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;zone&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;zone&quot;</span></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;id&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;id&quot;</span></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;searchName&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;name&quot;</span></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;lat&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;lat&quot;</span></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;lon&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;lon&quot;</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- General Rename</span><span>
+</span><span id="line-54"></span><span class="hs-comment">-- | Rename Fields for the Disruptions</span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;disruptionDetailIsType&quot;</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$type&quot;</span></span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="hs-comment">-- | General Rename</span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-var">renameFields</span></a></span><span> </span><span id="local-6989586621679110585"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110585"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110585"><span class="hs-identifier hs-var">other</span></a></span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- | Custom options for JSON parsing.</span></span><span>
+</span><span id="line-61"></span><span id="customOptions"><span class="annot"><span class="annottext">customOptions :: Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var hs-var">customOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options
+</span><span class="hs-identifier hs-var">defaultOptions</span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-62"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">fieldLabelModifier</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Parse.html#renameFields"><span class="hs-identifier hs-type">renameFields</span></a></span><span>
+</span><span id="line-63"></span><span class="hs-special">}</span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | Instances declarations for the Data Structures</span></span><span>
+</span><span id="line-66"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679110591"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier hs-type">Mode</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-67"></span><span>    </span><span id="local-6989586621679110707"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser Mode
+</span><a href="#local-6989586621679110707"><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser Mode
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679110712"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#Route"><span class="hs-identifier hs-type">Route</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-70"></span><span>    </span><span id="local-6989586621679110837"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser Route
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser Route
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679110840"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier hs-type">RouteSection</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-73"></span><span>    </span><span id="local-6989586621679110961"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser RouteSection
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser RouteSection
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679110964"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-type">Disruption</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-76"></span><span>    </span><span id="local-6989586621679111010"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser Disruption
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser Disruption
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111013"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-type">LineStatus</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-79"></span><span>    </span><span id="local-6989586621679111057"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser LineStatus
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser LineStatus
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111060"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#SearchDestination"><span class="hs-identifier hs-type">SearchDestination</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-82"></span><span>    </span><span id="local-6989586621679111139"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser SearchDestination
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser SearchDestination
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-83"></span><span>    </span><span>
+</span><span id="line-84"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111142"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#Match"><span class="hs-identifier hs-type">Match</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-85"></span><span>    </span><span id="local-6989586621679111253"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser Match
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser Match
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111256"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#DisruptionDetail"><span class="hs-identifier hs-type">DisruptionDetail</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-88"></span><span>    </span><span id="local-6989586621679111369"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser DisruptionDetail
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser DisruptionDetail
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111372"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#AffectedRoute"><span class="hs-identifier hs-type">AffectedRoute</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-91"></span><span>    </span><span id="local-6989586621679111425"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser AffectedRoute
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser AffectedRoute
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-92"></span><span>
+</span><span id="line-93"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679111428"><span class="annot"><span class="hs-identifier hs-type">FromJSON</span></span><span> </span><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier hs-type">AffectedStop</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-94"></span><span>    </span><span id="local-6989586621679111481"><span class="annot"><span class="annottext">parseJSON :: Value -&gt; Parser AffectedStop
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">parseJSON</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Options -&gt; Value -&gt; Parser AffectedStop
+forall a.
+(Generic a, GFromJSON Zero (Rep a)) =&gt;
+Options -&gt; Value -&gt; Parser a
+</span><span class="hs-identifier hs-var">genericParseJSON</span></span><span> </span><span class="annot"><span class="annottext">Options
+</span><a href="Parse.html#customOptions"><span class="hs-identifier hs-var">customOptions</span></a></span><span>
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="annot"><span class="hs-comment">-- | Parses a ByteString containing JSON data into a list of Mode objects (Modes).</span></span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Parse.html#parseModes"><span class="hs-identifier hs-type">parseModes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">L8.ByteString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="Types.html#Modes"><span class="hs-identifier hs-type">Modes</span></a></span><span>
+</span><span id="line-98"></span><span id="parseModes"><span class="annot"><span class="annottext">parseModes :: ByteString -&gt; Either String [Mode]
+</span><a href="Parse.html#parseModes"><span class="hs-identifier hs-var hs-var">parseModes</span></a></span></span><span> </span><span id="local-6989586621679111483"><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111483"><span class="hs-identifier hs-var">json</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ByteString -&gt; Either String [Mode]
+forall a. FromJSON a =&gt; ByteString -&gt; Either String a
+</span><span class="hs-identifier hs-var">eitherDecode</span></span><span> </span><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111483"><span class="hs-identifier hs-var">json</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Mode"><span class="hs-identifier hs-type">Mode</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span class="annot"><span class="hs-comment">-- | Helper function to concatenate the URLs for the Routes by Mode API</span></span><span>
+</span><span id="line-101"></span><span class="annot"><a href="Parse.html#parseURLforRoutesAPI"><span class="hs-identifier hs-type">parseURLforRoutesAPI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-102"></span><span id="parseURLforRoutesAPI"><span class="annot"><span class="annottext">parseURLforRoutesAPI :: [String] -&gt; String -&gt; [String]
+</span><a href="Parse.html#parseURLforRoutesAPI"><span class="hs-identifier hs-var hs-var">parseURLforRoutesAPI</span></a></span></span><span> </span><span id="local-6989586621679111485"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679111485"><span class="hs-identifier hs-var">modeName</span></a></span></span><span> </span><span id="local-6989586621679111486"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111486"><span class="hs-identifier hs-var">app_key</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679111487"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111487"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111488"><span class="hs-identifier hs-var">firstPartUrl</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111487"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;/Route?app_key=&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111486"><span class="hs-identifier hs-var">app_key</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679111485"><span class="hs-identifier hs-var">modeName</span></a></span><span>
+</span><span id="line-103"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-104"></span><span>        </span><span id="local-6989586621679111488"><span class="annot"><span class="annottext">firstPartUrl :: String
+</span><a href="#local-6989586621679111488"><span class="hs-identifier hs-var hs-var">firstPartUrl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;https://api.tfl.gov.uk/Line/Mode/&quot;</span></span><span>
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span class="annot"><span class="hs-comment">-- | Parses a ByteString containing JSON data into a list of Routes objects.</span></span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Parse.html#parseRoutes"><span class="hs-identifier hs-type">parseRoutes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">L8.ByteString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Route"><span class="hs-identifier hs-type">Route</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-108"></span><span id="parseRoutes"><span class="annot"><span class="annottext">parseRoutes :: ByteString -&gt; Either String [Route]
+</span><a href="Parse.html#parseRoutes"><span class="hs-identifier hs-var hs-var">parseRoutes</span></a></span></span><span> </span><span id="local-6989586621679111489"><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111489"><span class="hs-identifier hs-var">json</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ByteString -&gt; Either String [Route]
+forall a. FromJSON a =&gt; ByteString -&gt; Either String a
+</span><span class="hs-identifier hs-var">eitherDecode</span></span><span> </span><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111489"><span class="hs-identifier hs-var">json</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Route"><span class="hs-identifier hs-type">Route</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="annot"><span class="hs-comment">-- | Helper function to concatenate the URLs for the Disruptions by Mode API</span></span><span>
+</span><span id="line-111"></span><span class="annot"><a href="Parse.html#parseURLforDisruptionsAPI"><span class="hs-identifier hs-type">parseURLforDisruptionsAPI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-112"></span><span id="parseURLforDisruptionsAPI"><span class="annot"><span class="annottext">parseURLforDisruptionsAPI :: [String] -&gt; String -&gt; [String]
+</span><a href="Parse.html#parseURLforDisruptionsAPI"><span class="hs-identifier hs-var hs-var">parseURLforDisruptionsAPI</span></a></span></span><span> </span><span id="local-6989586621679111490"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679111490"><span class="hs-identifier hs-var">modeName</span></a></span></span><span> </span><span id="local-6989586621679111491"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111491"><span class="hs-identifier hs-var">app_key</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; [String] -&gt; [String]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679111492"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111492"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111493"><span class="hs-identifier hs-var">firstPartUrl</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111492"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;/Disruption?app_key=&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111491"><span class="hs-identifier hs-var">app_key</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679111490"><span class="hs-identifier hs-var">modeName</span></a></span><span>
+</span><span id="line-113"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-114"></span><span>        </span><span id="local-6989586621679111493"><span class="annot"><span class="annottext">firstPartUrl :: String
+</span><a href="#local-6989586621679111493"><span class="hs-identifier hs-var hs-var">firstPartUrl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;https://api.tfl.gov.uk/Line/Mode/&quot;</span></span><span>
+</span><span id="line-115"></span><span>
+</span><span id="line-116"></span><span class="annot"><span class="hs-comment">-- | Parses a ByteString containing JSON data into a list of Disruption objects.</span></span><span>
+</span><span id="line-117"></span><span class="annot"><a href="Parse.html#parseDisruptions"><span class="hs-identifier hs-type">parseDisruptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">L8.ByteString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="Types.html#DisruptionsResponse"><span class="hs-identifier hs-type">DisruptionsResponse</span></a></span><span>
+</span><span id="line-118"></span><span id="parseDisruptions"><span class="annot"><span class="annottext">parseDisruptions :: ByteString -&gt; Either String DisruptionsResponse
+</span><a href="Parse.html#parseDisruptions"><span class="hs-identifier hs-var hs-var">parseDisruptions</span></a></span></span><span> </span><span id="local-6989586621679111494"><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111494"><span class="hs-identifier hs-var">json</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ByteString -&gt; Either String DisruptionsResponse
+forall a. FromJSON a =&gt; ByteString -&gt; Either String a
+</span><span class="hs-identifier hs-var">eitherDecode</span></span><span> </span><span class="annot"><span class="annottext">ByteString
+</span><a href="#local-6989586621679111494"><span class="hs-identifier hs-var">json</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="Types.html#DisruptionsResponse"><span class="hs-identifier hs-type">DisruptionsResponse</span></a></span><span> </span><span>
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span class="annot"><span class="hs-comment">-- | Parses a ByteString containing JSON data into a list of SearchDestination objects.</span></span><span>
+</span><span id="line-121"></span><span class="annot"><a href="Parse.html#parseSearchDestination"><span class="hs-identifier hs-type">parseSearchDestination</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-122"></span><span id="parseSearchDestination"><span class="annot"><span class="annottext">parseSearchDestination :: String -&gt; String -&gt; String
+</span><a href="Parse.html#parseSearchDestination"><span class="hs-identifier hs-var hs-var">parseSearchDestination</span></a></span></span><span> </span><span id="local-6989586621679111495"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111495"><span class="hs-identifier hs-var">tflAppKey</span></a></span></span><span> </span><span id="local-6989586621679111496"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111496"><span class="hs-identifier hs-var">searchDestination</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-123"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;https://api.tfl.gov.uk/StopPoint/Search/&quot;</span></span><span>
+</span><span id="line-124"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111496"><span class="hs-identifier hs-var">searchDestination</span></a></span><span>
+</span><span id="line-125"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;?maxResults=10&amp;oysterOnly=false&amp;app_key=&quot;</span></span><span>
+</span><span id="line-126"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679111495"><span class="hs-identifier hs-var">tflAppKey</span></a></span><span> </span></pre></body></html>

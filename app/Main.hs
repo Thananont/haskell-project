@@ -10,7 +10,6 @@ import Types
 import Control.Monad
 import Data.Char 
 import Configuration.Dotenv (loadFile, defaultConfig)
-import System.Environment (lookupEnv)
 
 main :: IO ()
 main = do
@@ -26,27 +25,30 @@ main = do
     connection <- createDatabase
     args <- getArgs
     case args of
-        ["create"] -> do -- initialize the tables on the database
+        -- | Initialize the three tables, mode, route, and routesection on the database
+        ["create"] -> do
             initTables connection
             print "Finished initializing the tables in the database"
             close connection
 
-        ["drop"] -> do -- drop the three tables on the database
+        -- | Drop the three tables on the database
+        ["drop"] -> do
             dropAllTables connection
             print "Finished dropping the tables in the database"
             close connection
 
-        ["loaddata"] -> do -- download data from API and save to the database
+        -- Download data from the TFL APIs and save them to the database
+        ["loaddata"] -> do
             let url = "https://api.tfl.gov.uk/Line/Meta/Modes?app_key=" ++ tflAppKey
             print "Downloading"
             json <- download url
             case parseModes json of
                 Left err -> print err
-                Right modes -> do
+                Right modeList -> do
                     -- Insert Modes into the database
-                    insertModes connection modes
+                    insertModes connection modeList
                     -- Storing the modeName fields into a list of String to use them to the next API Call
-                    let modeNames = map modeName modes
+                    let modeNames = map modeName modeList
                     -- Concatenation of the URLs for the Routes API call
                     let parsedURLs = parseURLforRoutesAPI modeNames tflAppKey
                     -- Second API Call - Routes
@@ -60,24 +62,25 @@ main = do
             print "Finished loading and inserting data into the database"
             close connection
 
+        -- Dump the data from the database in a data.json file
         ["dumpdata"] -> do
             dumpDatabase connection
             close connection
 
-        -- | Print all modes
+        -- | Print all the modes of transportation in the database
         ["modes"] -> do 
             modeNames <- queryAllMode connection
             printModeName modeNames
             close connection
         
-        -- | Print routes based on the Modes
+        -- | Print all of the routes based on the input mode
         ["routes", modeN] -> do 
             let modenameL = map toLower modeN
             routes <- queryAllRoutes connection modenameL
             mapM_ print routes
             close connection
 
-         -- | Print stop points based on the Modes
+         -- | Print all of the stop points based on the inputted mode
         ["stop-points", modeN] -> do
             -- | handeling input case sensitivity
             let modeNameL = map toLower modeN
@@ -85,7 +88,7 @@ main = do
             mapM_ print stops
             close connection
 
-         -- | Search for destinations
+         -- | Search for destinations and print out its details
         ["search"] -> do
             putStrLn "Please enter your destination:"
             searchDestination <- getLine
@@ -93,30 +96,24 @@ main = do
             case result of
                 Left err -> putStrLn ("Error parsing JSON: " ++ err)
                 Right searchData -> do
-                    let result = searchMatches searchData
-                    if null result then
+                    let searchResult = searchMatches searchData
+                    if null searchResult then
                         putStrLn "Destination not found"
                     else do
                         putStrLn "Found search data"
-                        mapM_ printMatch result
+                        mapM_ printMatch searchResult
             close connection
 
-         -- | Print disruptions for all Kodes                    
+         -- | Print out real time disruptions occuring on the inputted mode              
+        
         ["disruptions"] -> do
             modeNames <- queryAllMode connection
             mapM_ (\mode -> do
-                let urls = parseURLforDisruptionsAPI [mode] tflAppKey
-                disruptionsList <- fmap concat $ mapM (\url -> do
-                    request <- parseRequest url
-                    response <- httpLBS request
-                    let jsonResponse = getResponseBody response
-                    queryAllDisruptions mode jsonResponse
-                    ) urls
-                 -- Only print if there are disruptions
+                disruptionsList <- fetchDisruptions mode tflAppKey
+                -- Only print if there are disruptions
                 unless (null disruptionsList) $ printDisruptions mode disruptionsList
                 ) modeNames    
             close connection
-
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 

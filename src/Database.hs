@@ -27,13 +27,16 @@ import Data.Aeson
 import Parse
 import Control.Monad
 
+-- | A function that converts Bool to Int
 fromBool :: Bool -> Int
 fromBool True = 1
 fromBool False = 0
 
+-- | A function that creates a connection with the database
 createDatabase :: IO Connection
 createDatabase = open "haskell-project-database.db"
 
+-- | A function that initializes the tables in the database
 initTables :: Connection -> IO ()
 initTables connection = do
     execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
@@ -67,15 +70,16 @@ initTables connection = do
         \ FOREIGN KEY (routeId) REFERENCES route (routeId) \
         \ )"
 
+-- | A function that drops the mode, route, and routesection table from the database
 dropAllTables :: Connection -> IO ()
 dropAllTables connection = do
     execute_ connection "DROP TABLE IF EXISTS mode"
     execute_ connection "DROP TABLE IF EXISTS route"
     execute_ connection "DROP TABLE IF EXISTS routesection"
 
--- Function that takes the modes and map them to be insert into the table
+-- | A function that takes the modes list and map them to the executeInsertMode function to insert them into the table, create the table if it doesn't exist
 insertModes :: Connection -> [Mode] -> IO ()
-insertModes connection modes = do            
+insertModes connection modeList = do            
     execute_ connection "CREATE TABLE IF NOT EXISTS mode ( \
         \ modeName TEXT PRIMARY KEY, \
         \ isType TEXT, \
@@ -83,9 +87,9 @@ insertModes connection modes = do
         \ isFarePaying INTEGER NOT NULL CHECK(isFarePaying IN (0, 1)), \
         \ isScheduledService INTEGER NOT NULL CHECK(isScheduledService IN (0, 1)) \
         \ )"
-    mapM_ (executeInsertMode connection) modes
+    mapM_ (executeInsertMode connection) modeList
 
--- Function insert the modes to the table
+-- | A function that inserts the mode to the mode table
 executeInsertMode :: Connection -> Mode -> IO ()
 executeInsertMode connection mode = execute connection "INSERT INTO mode ( \
     \ modeName, \
@@ -101,7 +105,7 @@ executeInsertMode connection mode = execute connection "INSERT INTO mode ( \
       fromBool (isScheduledService mode)
     )
 
--- Function that takes the routes and map them to be inserted into the table
+-- | A function that takes the route list and map them to the executeInsertRoute function to insert them into the tables, create the tables if it doesn't exist
 insertRoutesByMode :: Connection -> [Route] -> IO ()
 insertRoutesByMode connection routes = do            
     execute_ connection "CREATE TABLE IF NOT EXISTS route ( \
@@ -129,7 +133,7 @@ insertRoutesByMode connection routes = do
         \ )"
     mapM_ (executeInsertRoute connection) routes
 
--- Function insert the routes to the table and map the sections to be inserted into a table
+-- | A function that inserts the route to the table and map the routesections to the executeInsertRouteSection to insert them into the table
 executeInsertRoute :: Connection -> Route -> IO ()
 executeInsertRoute connection route  = do
     execute connection "INSERT INTO route ( \ 
@@ -149,7 +153,7 @@ executeInsertRoute connection route  = do
     let routeSections = routeRouteSections route
     mapM_ (executeInsertRouteSection connection (routeModeName route) (routeId route)) routeSections
 
--- Function insert the route sections
+-- | A function insert the route sections into the table
 executeInsertRouteSection :: Connection -> String -> String -> RouteSection -> IO ()
 executeInsertRouteSection connection routeModeName routeId routeSection = do
     execute connection "INSERT INTO routesection ( \ 
@@ -175,6 +179,7 @@ executeInsertRouteSection connection routeModeName routeId routeSection = do
         validTo routeSection
         )
 
+-- | A function that dump the data from the database into a json file
 dumpDatabase :: Connection -> IO ()
 dumpDatabase connection = do
     modes <- fetchModeData connection
@@ -184,39 +189,41 @@ dumpDatabase connection = do
     _ <- L8.writeFile "data.json" jsonData
     putStrLn "The database data has been written to the JSON file!"
 
+-- | A function that queries for the mode data in the mode table from the database
 fetchModeData :: Connection -> IO [ModeDB]
 fetchModeData connection = do
     modes <- query_ connection "SELECT isType, isTflService, isFarePaying, isScheduledService, modeName FROM mode" :: IO [ModeDB]
     return modes
 
+-- | A function that queries for the route data in the route table from the database
 fetchRouteData :: Connection -> IO [RouteDB]
 fetchRouteData connection = do
     routes <- query_ connection "SELECT routeIsType, routeName, routeModeName, routeCreated, routeModified, routeModeName FROM route" :: IO [RouteDB]
     return routes
 
+-- | A function that queries for the routesection data in the routesection table from the database
 fetchRouteSectionData :: Connection -> IO [RouteSectionDB]
 fetchRouteSectionData connection = do
     routeSections <- query_ connection "SELECT routeSectionName, routeSectionIsType, routeModeName,routeId,direction,originationName, destinationName, originator, destination, validTo FROM routesection" :: IO [RouteSectionDB]
     return routeSections
 
--- | Query to print all the modes 
+-- | A function that queries to print all of the name of the modes in the database
 queryAllMode :: Connection -> IO [String]
 queryAllMode connection =  do
     let selectQuery = "SELECT modeName FROM mode"
     results <- query_ connection selectQuery :: IO [Only String]
     return $ map fromOnly results
 
--- | Make the first letter of the string uppercase
+-- | A function that turn a string into its upper-case version
 toUpperFirst :: String -> String
 toUpperFirst [] = []
 toUpperFirst (x:xs) = toUpper x : xs
 
--- | Function to  print mode name with the first letter in uppercase
+-- | A function that prints a mode's name with the first letter in uppercase
 printModeName :: [String] -> IO ()
 printModeName modes =mapM_ (putStrLn . toUpperFirst) modes
 
--- | EXTRA FEARURES IMPLEMENTATION
--- | Query to print all the routes
+-- | A function that queries to print all name of the routes from a mode in the database
 queryAllRoutes :: Connection -> String -> IO [String]
 queryAllRoutes connection modeName = do
     putStrLn $ "Please wait, looking for all available routes for the " ++ modeName ++ "..."
@@ -228,7 +235,7 @@ queryAllRoutes connection modeName = do
     else
         return $ map fromOnly results
 
--- | Query for all stop points
+-- | A function that queries for all stop points from a mode in the database
 queryAllStopPoints :: Connection -> String -> IO [String]
 queryAllStopPoints connection modeName =  do
     putStrLn $ "Looking for stop points for " ++ modeName ++ "...."
@@ -240,32 +247,28 @@ queryAllStopPoints connection modeName =  do
     else
         return $ map fromOnly result
 
--- | Query for the search function
+-- | A function that queries for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
 fetchStops tflAppKey searchDestination = do
-  let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" 
-                  ++ searchDestination 
-                  ++ "?maxResults=10&oysterOnly=false&app_key=" 
-                  ++ tflAppKey
+  let searchUrl = parseSearchDestination tflAppKey searchDestination
   response <- httpLBS (parseRequest_ searchUrl)
   let body = getResponseBody response
   return (eitherDecode body :: Either String SearchDestination)
 
--- | Funtion to do a pretty print
+-- | A function to do a pretty print
 printMatch :: Match -> IO ()
 printMatch match = do
     putStrLn $ "Name: " ++ searchName match
     putStrLn $ "Available modes: " ++ show (modes match)
     putStrLn ""
            
--- | Query to print all the disruptions
--- | Funtion to print the disruption in a readble format 
+-- | A function that maps the disruptions to the printDisruption to be printed for each disruption of each mode
 printDisruptions :: String -> [DisruptionDetail] -> IO ()
 printDisruptions modeName disruptions = do
     putStrLn $ "Disruptions for Mode: " ++ modeName
     mapM_ printDisruption disruptions
 
--- | Funtion to print non empty detials
+-- | A funtion to print the disruption in a readble format 
 printDisruption :: DisruptionDetail -> IO ()
 printDisruption disruption = do
     let cat = category disruption
@@ -280,9 +283,9 @@ printDisruption disruption = do
     when (not $ null stops) $ putStrLn $ "Affected Stops: " ++ show (map affectedStopName stops)
     when (not $ null $ show update) $ putStrLn $ "Last Update: " ++ show update
     putStrLn "-----------------------------------"
-
-queryAllDisruptions :: String -> L8.ByteString -> IO [DisruptionDetail]
-queryAllDisruptions modeName json =
+-- | Funtion to fetch and print all the disruptions  
+queryAllDisruptions :: L8.ByteString -> IO [DisruptionDetail]
+queryAllDisruptions json =
     case parseDisruptions json of
         Left err -> do
             putStrLn $ "Error in parsing disruptions: " ++ err

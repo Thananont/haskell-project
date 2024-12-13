@@ -26,10 +26,11 @@ import GHC.Generics
 import Data.Aeson
 import Database.SQLite.Simple
 
+-- | Type Aliases for the URLs
 type URL = String
 type MultipleURL = [String]
 
--- | Data Structures for the Modes
+-- | Data Structure for Mode
 data Mode = Mode {
     isType :: String, 
     isTflService :: Bool,
@@ -39,6 +40,7 @@ data Mode = Mode {
 } deriving (Show, Generic)
 type Modes = [Mode]
 
+-- | Data Structure for ModeDB obtained querying modes from the database
 data ModeDB = ModeDB {
     isTypeDB :: String, 
     isTflServiceDB :: Bool,
@@ -50,7 +52,7 @@ instance ToJSON ModeDB
 instance FromRow ModeDB where
     fromRow = ModeDB <$> field <*> field <*> field <*> field <*> field
 
--- | Data Structures for the Routes
+-- | Data Structure for the Route
 data Route = Route {
     routeIsType :: String,
     routeId :: String,
@@ -63,6 +65,7 @@ data Route = Route {
     routeRouteSections :: [RouteSection]
 } deriving (Show, Generic)
 
+-- | Data Structure for RouteDB obtained querying routes from the database
 data RouteDB = RouteDB {
     routeIdDB :: String,
     routeIsTypeDB :: String, 
@@ -75,6 +78,7 @@ instance ToJSON RouteDB
 instance FromRow RouteDB where
     fromRow = RouteDB <$> field <*> field <*> field <*> field <*> field <*> field
 
+-- | Data Structure for RouteSection part of the Routes API
 data RouteSection = RouteSection {
     routeSectionIsType :: String,    
     routeSectionName :: String,
@@ -88,6 +92,7 @@ data RouteSection = RouteSection {
     validFrom :: String
 } deriving (Show, Generic)
 
+-- | Data Structure for RouteSectionDB obtained querying routesections from the database
 data RouteSectionDB = RouteSectionDB {
     routeSectionNameDB :: String, 
     routeSectionIsTypeDB :: String, 
@@ -105,20 +110,19 @@ instance ToJSON RouteSectionDB
 instance FromRow RouteSectionDB where
     fromRow = RouteSectionDB <$> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field <*> field
 
+-- | Data Structure that represents the service type of a route
 data ServiceType = ServiceType {
     serviceTypeIsType :: String,   
     serviceTypeName :: String,
     serviceTypeUri :: String
 } deriving (Show, Generic)
 
+-- | Data Structure that represents the line status of a route
 data LineStatus = LineStatus {
     lineStatusIsType :: String
 } deriving (Show, Generic)
 
-data Disruption = Disruption {
-    disruptionIsType :: String 
-} deriving (Show, Generic)
-
+-- | Data Structure that represents crowding information
 data Crowding = Crowding {
     crowdingIsType :: String
 } deriving (Show, Generic)
@@ -131,6 +135,7 @@ data SearchDestination = SearchDestination {
     searchMatches :: [Match]
 } deriving (Show, Generic)
 
+-- | Data Structure that represents the search result matches
 data Match = Match {
     matchIsType :: String,
     icsId :: String,
@@ -143,6 +148,13 @@ data Match = Match {
 } deriving (Show, Generic)
 
 -- | Data Structures for the Disruptions (Extra Implementation)
+
+-- | Data Structure that represents disruption information for a route
+data Disruption = Disruption {
+    disruptionIsType :: String 
+} deriving (Show, Generic)
+
+-- | Data Structure that represents disruption details
 data DisruptionDetail = DisruptionDetail
     { category :: String
     , disruptionDetailIsType :: String
@@ -154,11 +166,13 @@ data DisruptionDetail = DisruptionDetail
     , closureText :: Maybe String
     } deriving (Show, Generic)
 
+-- | Data Structure that represents routes affected by a disruption
 data AffectedRoute = AffectedRoute
     { affectedRouteId :: String
     , affectedRouteName :: String
     } deriving (Show, Generic)
 
+-- | Data Structure that represents stops affected by a disruption
 data AffectedStop = AffectedStop
     { affectedStopId :: String
     , affectedStopName :: String

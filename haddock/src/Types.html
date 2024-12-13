@@ -42,7 +42,7 @@
 </span><a href="Types.html#isScheduledService"><span class="hs-identifier hs-var hs-var">isScheduledService</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
 </span><span id="line-39"></span><span>    </span><span id="modeName"><span class="annot"><span class="annottext">Mode -&gt; String
 </span><a href="Types.html#modeName"><span class="hs-identifier hs-var hs-var">modeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-40"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109425"><span id="local-6989586621679109437"><span id="local-6989586621679109441"><span class="annot"><span class="annottext">Int -&gt; Mode -&gt; ShowS
+</span><span id="line-40"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109500"><span id="local-6989586621679109512"><span id="local-6989586621679109516"><span class="annot"><span class="annottext">Int -&gt; Mode -&gt; ShowS
 [Mode] -&gt; ShowS
 Mode -&gt; String
 (Int -&gt; Mode -&gt; ShowS)
@@ -55,7 +55,7 @@ $cshow :: Mode -&gt; String
 show :: Mode -&gt; String
 $cshowList :: [Mode] -&gt; ShowS
 showList :: [Mode] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109446"><span id="local-6989586621679109448"><span class="annot"><span class="annottext">(forall x. Mode -&gt; Rep Mode x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109521"><span id="local-6989586621679109523"><span class="annot"><span class="annottext">(forall x. Mode -&gt; Rep Mode x)
 -&gt; (forall x. Rep Mode x -&gt; Mode) -&gt; Generic Mode
 forall x. Rep Mode x -&gt; Mode
 forall x. Mode -&gt; Rep Mode x
@@ -80,7 +80,7 @@ to :: forall x. Rep Mode x -&gt; Mode
 </span><a href="Types.html#isScheduledServiceDB"><span class="hs-identifier hs-var hs-var">isScheduledServiceDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">,</span><span>
 </span><span id="line-49"></span><span>    </span><span id="modeNameDB"><span class="annot"><span class="annottext">ModeDB -&gt; String
 </span><a href="Types.html#modeNameDB"><span class="hs-identifier hs-var hs-var">modeNameDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-50"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109458"><span id="local-6989586621679109467"><span id="local-6989586621679109471"><span class="annot"><span class="annottext">Int -&gt; ModeDB -&gt; ShowS
+</span><span id="line-50"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109533"><span id="local-6989586621679109542"><span id="local-6989586621679109546"><span class="annot"><span class="annottext">Int -&gt; ModeDB -&gt; ShowS
 [ModeDB] -&gt; ShowS
 ModeDB -&gt; String
 (Int -&gt; ModeDB -&gt; ShowS)
@@ -93,7 +93,7 @@ $cshow :: ModeDB -&gt; String
 show :: ModeDB -&gt; String
 $cshowList :: [ModeDB] -&gt; ShowS
 showList :: [ModeDB] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109474"><span id="local-6989586621679109476"><span class="annot"><span class="annottext">(forall x. ModeDB -&gt; Rep ModeDB x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109549"><span id="local-6989586621679109551"><span class="annot"><span class="annottext">(forall x. ModeDB -&gt; Rep ModeDB x)
 -&gt; (forall x. Rep ModeDB x -&gt; ModeDB) -&gt; Generic ModeDB
 forall x. Rep ModeDB x -&gt; ModeDB
 forall x. ModeDB -&gt; Rep ModeDB x
@@ -104,10 +104,10 @@ from :: forall x. ModeDB -&gt; Rep ModeDB x
 $cto :: forall x. Rep ModeDB x -&gt; ModeDB
 to :: forall x. Rep ModeDB x -&gt; ModeDB
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109479"><span id="local-6989586621679109486"><span id="local-6989586621679109489"><span id="local-6989586621679109492"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-type">ModeDB</span></a></span></span></span></span></span><span>
+</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109554"><span id="local-6989586621679109561"><span id="local-6989586621679109564"><span id="local-6989586621679109567"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-type">ModeDB</span></a></span></span></span></span></span><span>
 </span><span id="line-52"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#ModeDB"><span class="hs-identifier hs-type">ModeDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-53"></span><span>    </span><span id="local-6989586621679109652"><span class="annot"><span class="annottext">fromRow :: RowParser ModeDB
-</span><a href="#local-6989586621679109652"><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB
+</span><span id="line-53"></span><span>    </span><span id="local-6989586621679109727"><span class="annot"><span class="annottext">fromRow :: RowParser ModeDB
+</span><a href="#local-6989586621679109727"><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB
 </span><a href="Types.html#ModeDB"><span class="hs-identifier hs-var">ModeDB</span></a></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB)
 -&gt; RowParser String
 -&gt; RowParser (Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; ModeDB)
@@ -160,7 +160,7 @@ forall a. FromField a =&gt; RowParser a
 </span><a href="Types.html#routeLineStatuses"><span class="hs-identifier hs-var hs-var">routeLineStatuses</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-type">LineStatus</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-65"></span><span>    </span><span id="routeRouteSections"><span class="annot"><span class="annottext">Route -&gt; [RouteSection]
 </span><a href="Types.html#routeRouteSections"><span class="hs-identifier hs-var hs-var">routeRouteSections</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#RouteSection"><span class="hs-identifier hs-type">RouteSection</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-66"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109667"><span id="local-6989586621679109683"><span id="local-6989586621679109687"><span class="annot"><span class="annottext">Int -&gt; Route -&gt; ShowS
+</span><span id="line-66"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109742"><span id="local-6989586621679109758"><span id="local-6989586621679109762"><span class="annot"><span class="annottext">Int -&gt; Route -&gt; ShowS
 [Route] -&gt; ShowS
 Route -&gt; String
 (Int -&gt; Route -&gt; ShowS)
@@ -173,7 +173,7 @@ $cshow :: Route -&gt; String
 show :: Route -&gt; String
 $cshowList :: [Route] -&gt; ShowS
 showList :: [Route] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109693"><span id="local-6989586621679109695"><span class="annot"><span class="annottext">(forall x. Route -&gt; Rep Route x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109768"><span id="local-6989586621679109770"><span class="annot"><span class="annottext">(forall x. Route -&gt; Rep Route x)
 -&gt; (forall x. Rep Route x -&gt; Route) -&gt; Generic Route
 forall x. Rep Route x -&gt; Route
 forall x. Route -&gt; Rep Route x
@@ -199,7 +199,7 @@ to :: forall x. Rep Route x -&gt; Route
 </span><a href="Types.html#routeCreatedDB"><span class="hs-identifier hs-var hs-var">routeCreatedDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-75"></span><span>    </span><span id="routeModifiedDB"><span class="annot"><span class="annottext">RouteDB -&gt; String
 </span><a href="Types.html#routeModifiedDB"><span class="hs-identifier hs-var hs-var">routeModifiedDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-76"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109705"><span id="local-6989586621679109715"><span id="local-6989586621679109719"><span class="annot"><span class="annottext">Int -&gt; RouteDB -&gt; ShowS
+</span><span id="line-76"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109780"><span id="local-6989586621679109790"><span id="local-6989586621679109794"><span class="annot"><span class="annottext">Int -&gt; RouteDB -&gt; ShowS
 [RouteDB] -&gt; ShowS
 RouteDB -&gt; String
 (Int -&gt; RouteDB -&gt; ShowS)
@@ -212,7 +212,7 @@ $cshow :: RouteDB -&gt; String
 show :: RouteDB -&gt; String
 $cshowList :: [RouteDB] -&gt; ShowS
 showList :: [RouteDB] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109722"><span id="local-6989586621679109724"><span class="annot"><span class="annottext">(forall x. RouteDB -&gt; Rep RouteDB x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109797"><span id="local-6989586621679109799"><span class="annot"><span class="annottext">(forall x. RouteDB -&gt; Rep RouteDB x)
 -&gt; (forall x. Rep RouteDB x -&gt; RouteDB) -&gt; Generic RouteDB
 forall x. Rep RouteDB x -&gt; RouteDB
 forall x. RouteDB -&gt; Rep RouteDB x
@@ -223,9 +223,9 @@ from :: forall x. RouteDB -&gt; Rep RouteDB x
 $cto :: forall x. Rep RouteDB x -&gt; RouteDB
 to :: forall x. Rep RouteDB x -&gt; RouteDB
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-77"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109727"><span id="local-6989586621679109734"><span id="local-6989586621679109737"><span id="local-6989586621679109740"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-type">RouteDB</span></a></span></span></span></span></span><span>
+</span><span id="line-77"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109802"><span id="local-6989586621679109809"><span id="local-6989586621679109812"><span id="local-6989586621679109815"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-type">RouteDB</span></a></span></span></span></span></span><span>
 </span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#RouteDB"><span class="hs-identifier hs-type">RouteDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-79"></span><span>    </span><span id="local-6989586621679109868"><span class="annot"><span class="annottext">fromRow :: RowParser RouteDB
+</span><span id="line-79"></span><span>    </span><span id="local-6989586621679109943"><span class="annot"><span class="annottext">fromRow :: RowParser RouteDB
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB
 </span><a href="Types.html#RouteDB"><span class="hs-identifier hs-var">RouteDB</span></a></span><span> </span><span class="annot"><span class="annottext">(String
  -&gt; String -&gt; String -&gt; String -&gt; String -&gt; String -&gt; RouteDB)
@@ -292,7 +292,7 @@ forall a. FromField a =&gt; RowParser a
 </span><a href="Types.html#validTo"><span class="hs-identifier hs-var hs-var">validTo</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
 </span><span id="line-92"></span><span>    </span><span id="validFrom"><span class="annot"><span class="annottext">RouteSection -&gt; String
 </span><a href="Types.html#validFrom"><span class="hs-identifier hs-var hs-var">validFrom</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-93"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109881"><span id="local-6989586621679109895"><span id="local-6989586621679109898"><span class="annot"><span class="annottext">Int -&gt; RouteSection -&gt; ShowS
+</span><span id="line-93"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109956"><span id="local-6989586621679109970"><span id="local-6989586621679109973"><span class="annot"><span class="annottext">Int -&gt; RouteSection -&gt; ShowS
 [RouteSection] -&gt; ShowS
 RouteSection -&gt; String
 (Int -&gt; RouteSection -&gt; ShowS)
@@ -307,7 +307,7 @@ $cshow :: RouteSection -&gt; String
 show :: RouteSection -&gt; String
 $cshowList :: [RouteSection] -&gt; ShowS
 showList :: [RouteSection] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109901"><span id="local-6989586621679109903"><span class="annot"><span class="annottext">(forall x. RouteSection -&gt; Rep RouteSection x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109976"><span id="local-6989586621679109978"><span class="annot"><span class="annottext">(forall x. RouteSection -&gt; Rep RouteSection x)
 -&gt; (forall x. Rep RouteSection x -&gt; RouteSection)
 -&gt; Generic RouteSection
 forall x. Rep RouteSection x -&gt; RouteSection
@@ -342,7 +342,7 @@ to :: forall x. Rep RouteSection x -&gt; RouteSection
 </span><a href="Types.html#destinationDB"><span class="hs-identifier hs-var hs-var">destinationDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-106"></span><span>    </span><span id="validToDB"><span class="annot"><span class="annottext">RouteSectionDB -&gt; String
 </span><a href="Types.html#validToDB"><span class="hs-identifier hs-var hs-var">validToDB</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-107"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109917"><span id="local-6989586621679109931"><span id="local-6989586621679109935"><span class="annot"><span class="annottext">Int -&gt; RouteSectionDB -&gt; ShowS
+</span><span id="line-107"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109992"><span id="local-6989586621679110006"><span id="local-6989586621679110010"><span class="annot"><span class="annottext">Int -&gt; RouteSectionDB -&gt; ShowS
 [RouteSectionDB] -&gt; ShowS
 RouteSectionDB -&gt; String
 (Int -&gt; RouteSectionDB -&gt; ShowS)
@@ -357,7 +357,7 @@ $cshow :: RouteSectionDB -&gt; String
 show :: RouteSectionDB -&gt; String
 $cshowList :: [RouteSectionDB] -&gt; ShowS
 showList :: [RouteSectionDB] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109938"><span id="local-6989586621679109940"><span class="annot"><span class="annottext">(forall x. RouteSectionDB -&gt; Rep RouteSectionDB x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110013"><span id="local-6989586621679110015"><span class="annot"><span class="annottext">(forall x. RouteSectionDB -&gt; Rep RouteSectionDB x)
 -&gt; (forall x. Rep RouteSectionDB x -&gt; RouteSectionDB)
 -&gt; Generic RouteSectionDB
 forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
@@ -370,9 +370,9 @@ $cto :: forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
 to :: forall x. Rep RouteSectionDB x -&gt; RouteSectionDB
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-108"></span><span>
-</span><span id="line-109"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679109943"><span id="local-6989586621679109950"><span id="local-6989586621679109953"><span id="local-6989586621679109956"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-type">RouteSectionDB</span></a></span></span></span></span></span><span>
+</span><span id="line-109"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679110018"><span id="local-6989586621679110025"><span id="local-6989586621679110028"><span id="local-6989586621679110031"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-type">RouteSectionDB</span></a></span></span></span></span></span><span>
 </span><span id="line-110"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FromRow</span></span><span> </span><span class="annot"><a href="Types.html#RouteSectionDB"><span class="hs-identifier hs-type">RouteSectionDB</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-111"></span><span>    </span><span id="local-6989586621679110146"><span class="annot"><span class="annottext">fromRow :: RowParser RouteSectionDB
+</span><span id="line-111"></span><span>    </span><span id="local-6989586621679110221"><span class="annot"><span class="annottext">fromRow :: RowParser RouteSectionDB
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">fromRow</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; String
 -&gt; String
@@ -542,7 +542,7 @@ forall a. FromField a =&gt; RowParser a
 </span><a href="Types.html#serviceTypeName"><span class="hs-identifier hs-var hs-var">serviceTypeName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span>
 </span><span id="line-117"></span><span>    </span><span id="serviceTypeUri"><span class="annot"><span class="annottext">ServiceType -&gt; String
 </span><a href="Types.html#serviceTypeUri"><span class="hs-identifier hs-var hs-var">serviceTypeUri</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-118"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110152"><span id="local-6989586621679110159"><span id="local-6989586621679110163"><span class="annot"><span class="annottext">Int -&gt; ServiceType -&gt; ShowS
+</span><span id="line-118"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110227"><span id="local-6989586621679110234"><span id="local-6989586621679110238"><span class="annot"><span class="annottext">Int -&gt; ServiceType -&gt; ShowS
 [ServiceType] -&gt; ShowS
 ServiceType -&gt; String
 (Int -&gt; ServiceType -&gt; ShowS)
@@ -557,7 +557,7 @@ $cshow :: ServiceType -&gt; String
 show :: ServiceType -&gt; String
 $cshowList :: [ServiceType] -&gt; ShowS
 showList :: [ServiceType] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110166"><span id="local-6989586621679110168"><span class="annot"><span class="annottext">(forall x. ServiceType -&gt; Rep ServiceType x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110241"><span id="local-6989586621679110243"><span class="annot"><span class="annottext">(forall x. ServiceType -&gt; Rep ServiceType x)
 -&gt; (forall x. Rep ServiceType x -&gt; ServiceType)
 -&gt; Generic ServiceType
 forall x. Rep ServiceType x -&gt; ServiceType
@@ -574,7 +574,7 @@ to :: forall x. Rep ServiceType x -&gt; ServiceType
 </span><span id="line-121"></span><span class="hs-keyword">data</span><span> </span><span id="LineStatus"><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-var">LineStatus</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="LineStatus"><span class="annot"><a href="Types.html#LineStatus"><span class="hs-identifier hs-var">LineStatus</span></a></span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-122"></span><span>    </span><span id="lineStatusIsType"><span class="annot"><span class="annottext">LineStatus -&gt; String
 </span><a href="Types.html#lineStatusIsType"><span class="hs-identifier hs-var hs-var">lineStatusIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-123"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110173"><span id="local-6989586621679110178"><span id="local-6989586621679110181"><span class="annot"><span class="annottext">Int -&gt; LineStatus -&gt; ShowS
+</span><span id="line-123"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110248"><span id="local-6989586621679110253"><span id="local-6989586621679110256"><span class="annot"><span class="annottext">Int -&gt; LineStatus -&gt; ShowS
 [LineStatus] -&gt; ShowS
 LineStatus -&gt; String
 (Int -&gt; LineStatus -&gt; ShowS)
@@ -589,7 +589,7 @@ $cshow :: LineStatus -&gt; String
 show :: LineStatus -&gt; String
 $cshowList :: [LineStatus] -&gt; ShowS
 showList :: [LineStatus] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110184"><span id="local-6989586621679110186"><span class="annot"><span class="annottext">(forall x. LineStatus -&gt; Rep LineStatus x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110259"><span id="local-6989586621679110261"><span class="annot"><span class="annottext">(forall x. LineStatus -&gt; Rep LineStatus x)
 -&gt; (forall x. Rep LineStatus x -&gt; LineStatus) -&gt; Generic LineStatus
 forall x. Rep LineStatus x -&gt; LineStatus
 forall x. LineStatus -&gt; Rep LineStatus x
@@ -605,7 +605,7 @@ to :: forall x. Rep LineStatus x -&gt; LineStatus
 </span><span id="line-126"></span><span class="hs-keyword">data</span><span> </span><span id="Crowding"><span class="annot"><a href="Types.html#Crowding"><span class="hs-identifier hs-var">Crowding</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Crowding"><span class="annot"><a href="Types.html#Crowding"><span class="hs-identifier hs-var">Crowding</span></a></span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-127"></span><span>    </span><span id="crowdingIsType"><span class="annot"><span class="annottext">Crowding -&gt; String
 </span><a href="Types.html#crowdingIsType"><span class="hs-identifier hs-var hs-var">crowdingIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-128"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110191"><span id="local-6989586621679110196"><span id="local-6989586621679110200"><span class="annot"><span class="annottext">Int -&gt; Crowding -&gt; ShowS
+</span><span id="line-128"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110266"><span id="local-6989586621679110271"><span id="local-6989586621679110275"><span class="annot"><span class="annottext">Int -&gt; Crowding -&gt; ShowS
 [Crowding] -&gt; ShowS
 Crowding -&gt; String
 (Int -&gt; Crowding -&gt; ShowS)
@@ -618,7 +618,7 @@ $cshow :: Crowding -&gt; String
 show :: Crowding -&gt; String
 $cshowList :: [Crowding] -&gt; ShowS
 showList :: [Crowding] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110203"><span id="local-6989586621679110205"><span class="annot"><span class="annottext">(forall x. Crowding -&gt; Rep Crowding x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110278"><span id="local-6989586621679110280"><span class="annot"><span class="annottext">(forall x. Crowding -&gt; Rep Crowding x)
 -&gt; (forall x. Rep Crowding x -&gt; Crowding) -&gt; Generic Crowding
 forall x. Rep Crowding x -&gt; Crowding
 forall x. Crowding -&gt; Rep Crowding x
@@ -640,7 +640,7 @@ to :: forall x. Rep Crowding x -&gt; Crowding
 </span><a href="Types.html#total"><span class="hs-identifier hs-var hs-var">total</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
 </span><span id="line-135"></span><span>    </span><span id="searchMatches"><span class="annot"><span class="annottext">SearchDestination -&gt; [Match]
 </span><a href="Types.html#searchMatches"><span class="hs-identifier hs-var hs-var">searchMatches</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#Match"><span class="hs-identifier hs-type">Match</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-136"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110213"><span id="local-6989586621679110223"><span id="local-6989586621679110227"><span class="annot"><span class="annottext">Int -&gt; SearchDestination -&gt; ShowS
+</span><span id="line-136"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110288"><span id="local-6989586621679110298"><span id="local-6989586621679110302"><span class="annot"><span class="annottext">Int -&gt; SearchDestination -&gt; ShowS
 [SearchDestination] -&gt; ShowS
 SearchDestination -&gt; String
 (Int -&gt; SearchDestination -&gt; ShowS)
@@ -655,7 +655,7 @@ $cshow :: SearchDestination -&gt; String
 show :: SearchDestination -&gt; String
 $cshowList :: [SearchDestination] -&gt; ShowS
 showList :: [SearchDestination] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110231"><span id="local-6989586621679110233"><span class="annot"><span class="annottext">(forall x. SearchDestination -&gt; Rep SearchDestination x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110306"><span id="local-6989586621679110308"><span class="annot"><span class="annottext">(forall x. SearchDestination -&gt; Rep SearchDestination x)
 -&gt; (forall x. Rep SearchDestination x -&gt; SearchDestination)
 -&gt; Generic SearchDestination
 forall x. Rep SearchDestination x -&gt; SearchDestination
@@ -686,7 +686,7 @@ to :: forall x. Rep SearchDestination x -&gt; SearchDestination
 </span><a href="Types.html#lat"><span class="hs-identifier hs-var hs-var">lat</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span>
 </span><span id="line-147"></span><span>    </span><span id="lon"><span class="annot"><span class="annottext">Match -&gt; Double
 </span><a href="Types.html#lon"><span class="hs-identifier hs-var hs-var">lon</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
-</span><span id="line-148"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110245"><span id="local-6989586621679110259"><span id="local-6989586621679110262"><span class="annot"><span class="annottext">Int -&gt; Match -&gt; ShowS
+</span><span id="line-148"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110320"><span id="local-6989586621679110334"><span id="local-6989586621679110337"><span class="annot"><span class="annottext">Int -&gt; Match -&gt; ShowS
 [Match] -&gt; ShowS
 Match -&gt; String
 (Int -&gt; Match -&gt; ShowS)
@@ -699,7 +699,7 @@ $cshow :: Match -&gt; String
 show :: Match -&gt; String
 $cshowList :: [Match] -&gt; ShowS
 showList :: [Match] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110265"><span id="local-6989586621679110267"><span class="annot"><span class="annottext">(forall x. Match -&gt; Rep Match x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110340"><span id="local-6989586621679110342"><span class="annot"><span class="annottext">(forall x. Match -&gt; Rep Match x)
 -&gt; (forall x. Rep Match x -&gt; Match) -&gt; Generic Match
 forall x. Rep Match x -&gt; Match
 forall x. Match -&gt; Rep Match x
@@ -717,7 +717,7 @@ to :: forall x. Rep Match x -&gt; Match
 </span><span id="line-153"></span><span class="hs-keyword">data</span><span> </span><span id="Disruption"><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-var">Disruption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Disruption"><span class="annot"><a href="Types.html#Disruption"><span class="hs-identifier hs-var">Disruption</span></a></span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-154"></span><span>    </span><span id="disruptionIsType"><span class="annot"><span class="annottext">Disruption -&gt; String
 </span><a href="Types.html#disruptionIsType"><span class="hs-identifier hs-var hs-var">disruptionIsType</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span>
-</span><span id="line-155"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110272"><span id="local-6989586621679110277"><span id="local-6989586621679110280"><span class="annot"><span class="annottext">Int -&gt; Disruption -&gt; ShowS
+</span><span id="line-155"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110347"><span id="local-6989586621679110352"><span id="local-6989586621679110355"><span class="annot"><span class="annottext">Int -&gt; Disruption -&gt; ShowS
 [Disruption] -&gt; ShowS
 Disruption -&gt; String
 (Int -&gt; Disruption -&gt; ShowS)
@@ -732,7 +732,7 @@ $cshow :: Disruption -&gt; String
 show :: Disruption -&gt; String
 $cshowList :: [Disruption] -&gt; ShowS
 showList :: [Disruption] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110283"><span id="local-6989586621679110285"><span class="annot"><span class="annottext">(forall x. Disruption -&gt; Rep Disruption x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110358"><span id="local-6989586621679110360"><span class="annot"><span class="annottext">(forall x. Disruption -&gt; Rep Disruption x)
 -&gt; (forall x. Rep Disruption x -&gt; Disruption) -&gt; Generic Disruption
 forall x. Rep Disruption x -&gt; Disruption
 forall x. Disruption -&gt; Rep Disruption x
@@ -762,7 +762,7 @@ to :: forall x. Rep Disruption x -&gt; Disruption
 </span><a href="Types.html#affectedStops"><span class="hs-identifier hs-var hs-var">affectedStops</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Types.html#AffectedStop"><span class="hs-identifier hs-type">AffectedStop</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-166"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="closureText"><span class="annot"><span class="annottext">DisruptionDetail -&gt; Maybe String
 </span><a href="Types.html#closureText"><span class="hs-identifier hs-var hs-var">closureText</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-167"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110297"><span id="local-6989586621679110311"><span id="local-6989586621679110315"><span class="annot"><span class="annottext">Int -&gt; DisruptionDetail -&gt; ShowS
+</span><span id="line-167"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110372"><span id="local-6989586621679110386"><span id="local-6989586621679110390"><span class="annot"><span class="annottext">Int -&gt; DisruptionDetail -&gt; ShowS
 [DisruptionDetail] -&gt; ShowS
 DisruptionDetail -&gt; String
 (Int -&gt; DisruptionDetail -&gt; ShowS)
@@ -777,7 +777,7 @@ $cshow :: DisruptionDetail -&gt; String
 show :: DisruptionDetail -&gt; String
 $cshowList :: [DisruptionDetail] -&gt; ShowS
 showList :: [DisruptionDetail] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110320"><span id="local-6989586621679110322"><span class="annot"><span class="annottext">(forall x. DisruptionDetail -&gt; Rep DisruptionDetail x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110395"><span id="local-6989586621679110397"><span class="annot"><span class="annottext">(forall x. DisruptionDetail -&gt; Rep DisruptionDetail x)
 -&gt; (forall x. Rep DisruptionDetail x -&gt; DisruptionDetail)
 -&gt; Generic DisruptionDetail
 forall x. Rep DisruptionDetail x -&gt; DisruptionDetail
@@ -796,7 +796,7 @@ to :: forall x. Rep DisruptionDetail x -&gt; DisruptionDetail
 </span><a href="Types.html#affectedRouteId"><span class="hs-identifier hs-var hs-var">affectedRouteId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-172"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedRouteName"><span class="annot"><span class="annottext">AffectedRoute -&gt; String
 </span><a href="Types.html#affectedRouteName"><span class="hs-identifier hs-var hs-var">affectedRouteName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-173"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110328"><span id="local-6989586621679110334"><span id="local-6989586621679110337"><span class="annot"><span class="annottext">Int -&gt; AffectedRoute -&gt; ShowS
+</span><span id="line-173"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110403"><span id="local-6989586621679110409"><span id="local-6989586621679110412"><span class="annot"><span class="annottext">Int -&gt; AffectedRoute -&gt; ShowS
 [AffectedRoute] -&gt; ShowS
 AffectedRoute -&gt; String
 (Int -&gt; AffectedRoute -&gt; ShowS)
@@ -811,7 +811,7 @@ $cshow :: AffectedRoute -&gt; String
 show :: AffectedRoute -&gt; String
 $cshowList :: [AffectedRoute] -&gt; ShowS
 showList :: [AffectedRoute] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110340"><span id="local-6989586621679110342"><span class="annot"><span class="annottext">(forall x. AffectedRoute -&gt; Rep AffectedRoute x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110415"><span id="local-6989586621679110417"><span class="annot"><span class="annottext">(forall x. AffectedRoute -&gt; Rep AffectedRoute x)
 -&gt; (forall x. Rep AffectedRoute x -&gt; AffectedRoute)
 -&gt; Generic AffectedRoute
 forall x. Rep AffectedRoute x -&gt; AffectedRoute
@@ -830,7 +830,7 @@ to :: forall x. Rep AffectedRoute x -&gt; AffectedRoute
 </span><a href="Types.html#affectedStopId"><span class="hs-identifier hs-var hs-var">affectedStopId</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-178"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="affectedStopName"><span class="annot"><span class="annottext">AffectedStop -&gt; String
 </span><a href="Types.html#affectedStopName"><span class="hs-identifier hs-var hs-var">affectedStopName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-179"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110348"><span id="local-6989586621679110354"><span id="local-6989586621679110357"><span class="annot"><span class="annottext">Int -&gt; AffectedStop -&gt; ShowS
+</span><span id="line-179"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110423"><span id="local-6989586621679110429"><span id="local-6989586621679110432"><span class="annot"><span class="annottext">Int -&gt; AffectedStop -&gt; ShowS
 [AffectedStop] -&gt; ShowS
 AffectedStop -&gt; String
 (Int -&gt; AffectedStop -&gt; ShowS)
@@ -845,7 +845,7 @@ $cshow :: AffectedStop -&gt; String
 show :: AffectedStop -&gt; String
 $cshowList :: [AffectedStop] -&gt; ShowS
 showList :: [AffectedStop] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110360"><span id="local-6989586621679110362"><span class="annot"><span class="annottext">(forall x. AffectedStop -&gt; Rep AffectedStop x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110435"><span id="local-6989586621679110437"><span class="annot"><span class="annottext">(forall x. AffectedStop -&gt; Rep AffectedStop x)
 -&gt; (forall x. Rep AffectedStop x -&gt; AffectedStop)
 -&gt; Generic AffectedStop
 forall x. Rep AffectedStop x -&gt; AffectedStop

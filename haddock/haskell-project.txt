@@ -209,6 +209,10 @@ parseURLforDisruptionsAPI :: [String] -> String -> [String]
 -- | Parses a ByteString containing JSON data into a list of Disruption
 --   objects.
 parseDisruptions :: ByteString -> Either String DisruptionsResponse
+
+-- | Parses a ByteString containing JSON data into a list of
+--   SearchDestination objects.
+parseSearchDestination :: String -> String -> String
 instance Data.Aeson.Types.FromJSON.FromJSON Types.Mode
 instance Data.Aeson.Types.FromJSON.FromJSON Types.Route
 instance Data.Aeson.Types.FromJSON.FromJSON Types.RouteSection
@@ -219,14 +223,6 @@ instance Data.Aeson.Types.FromJSON.FromJSON Types.Match
 instance Data.Aeson.Types.FromJSON.FromJSON Types.DisruptionDetail
 instance Data.Aeson.Types.FromJSON.FromJSON Types.AffectedRoute
 instance Data.Aeson.Types.FromJSON.FromJSON Types.AffectedStop
-
-module Fetch
-
--- | General Download Function to Fetch Data from an Endpoint
-download :: URL -> IO ByteString
-
--- | Function to make multiple API Calls
-downloadMultiple :: MultipleURL -> IO [ByteString]
 
 module Database
 
@@ -279,3 +275,14 @@ printDisruptions :: String -> [DisruptionDetail] -> IO ()
 -- | A function that queries for all stop points from a mode in the
 --   database
 queryAllStopPoints :: Connection -> String -> IO [String]
+
+module Fetch
+
+-- | General Download Function to Fetch Data from an Endpoint
+download :: URL -> IO ByteString
+
+-- | Function to make multiple API Calls
+downloadMultiple :: MultipleURL -> IO [ByteString]
+
+-- | Function to fetch Disruptions from the TFL API
+fetchDisruptions :: String -> String -> IO [DisruptionDetail]

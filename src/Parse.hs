@@ -6,6 +6,7 @@ module Parse (
     parseRoutes,
     parseURLforDisruptionsAPI,
     parseDisruptions,
+    parseSearchDestination,
 ) where
 
 import Types
@@ -115,3 +116,11 @@ parseURLforDisruptionsAPI modeName app_key = map (\mode -> firstPartUrl ++ mode 
 -- | Parses a ByteString containing JSON data into a list of Disruption objects.
 parseDisruptions :: L8.ByteString -> Either String DisruptionsResponse
 parseDisruptions json = eitherDecode json :: Either String DisruptionsResponse 
+
+-- | Parses a ByteString containing JSON data into a list of SearchDestination objects.
+parseSearchDestination :: String -> String -> String
+parseSearchDestination tflAppKey searchDestination =
+    "https://api.tfl.gov.uk/StopPoint/Search/"
+    ++ searchDestination
+    ++ "?maxResults=10&oysterOnly=false&app_key="
+    ++ tflAppKey 

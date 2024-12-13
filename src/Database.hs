@@ -250,10 +250,7 @@ queryAllStopPoints connection modeName =  do
 -- | A function that queries for the search function
 fetchStops :: String -> String -> IO (Either String SearchDestination)
 fetchStops tflAppKey searchDestination = do
-  let searchUrl = "https://api.tfl.gov.uk/StopPoint/Search/" 
-                  ++ searchDestination 
-                  ++ "?maxResults=10&oysterOnly=false&app_key=" 
-                  ++ tflAppKey
+  let searchUrl = parseSearchDestination tflAppKey searchDestination
   response <- httpLBS (parseRequest_ searchUrl)
   let body = getResponseBody response
   return (eitherDecode body :: Either String SearchDestination)

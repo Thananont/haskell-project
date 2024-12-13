@@ -105,21 +105,15 @@ main = do
             close connection
 
          -- | Print out real time disruptions occuring on the inputted mode              
+        
         ["disruptions"] -> do
             modeNames <- queryAllMode connection
             mapM_ (\mode -> do
-                let urls = parseURLforDisruptionsAPI [mode] tflAppKey
-                disruptionsList <- fmap concat $ mapM (\url -> do
-                    request <- parseRequest url
-                    response <- httpLBS request
-                    let jsonResponse = getResponseBody response
-                    queryAllDisruptions jsonResponse
-                    ) urls
-                 -- Only print if there are disruptions
+                disruptionsList <- fetchDisruptions mode tflAppKey
+                -- Only print if there are disruptions
                 unless (null disruptionsList) $ printDisruptions mode disruptionsList
                 ) modeNames    
             close connection
-
         _ -> syntaxError
 
 -- | Information Message to be displayed to the user in case he gives a wrong argument 

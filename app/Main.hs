@@ -93,9 +93,12 @@ main = do
             case result of
                 Left err -> putStrLn ("Error parsing JSON: " ++ err)
                 Right searchData -> do
-                    putStrLn "Found search data"
-                    let matches = searchMatches searchData
-                    mapM_ printMatch matches
+                    let result = searchMatches searchData
+                    if null result then
+                        putStrLn "Destination not found"
+                    else do
+                        putStrLn "Found search data"
+                        mapM_ printMatch result
             close connection
 
          -- | Print disruptions for all Kodes                    

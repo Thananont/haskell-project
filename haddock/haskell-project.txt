@@ -266,6 +266,8 @@ fetchStops :: String -> String -> IO (Either String SearchDestination)
 
 -- | A function to do a pretty print
 printMatch :: Match -> IO ()
+
+-- | Funtion to fetch and print all the disruptions
 queryAllDisruptions :: ByteString -> IO [DisruptionDetail]
 
 -- | A function that maps the disruptions to the printDisruption to be
